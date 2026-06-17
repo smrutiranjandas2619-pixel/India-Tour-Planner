@@ -229,11 +229,7 @@ const Dashboard = () => {
                 <td>${tripData.costs?.fuel?.desc || ''}</td>
                 <td>₹${tripData.costs?.fuel?.total?.toLocaleString('en-IN') || '0'}</td>
               </tr>
-              <tr>
-                <td>Sightseeing Entry Fees</td>
-                <td>${tripData.costs?.entry_fees?.desc || ''}</td>
-                <td>₹${tripData.costs?.entry_fees?.total?.toLocaleString('en-IN') || '0'}</td>
-              </tr>
+
               <tr>
                 <td>Emergency Reserve (5%)</td>
                 <td>${tripData.costs?.emergency_buffer?.desc || ''}</td>
@@ -273,9 +269,7 @@ ITEMIZED BUDGET ESTIMATES:
    Details: ${costs.rental.desc}
 4. Transit Fuel: ₹${costs.fuel.total.toLocaleString('en-IN')}
    Details: ${costs.fuel.desc}
-5. Entry Fees: ₹${costs.entry_fees.total.toLocaleString('en-IN')}
-   Details: ${costs.entry_fees.desc}
-6. Emergency Buffer (5%): ₹${costs.emergency_buffer.total.toLocaleString('en-IN')}
+5. Emergency Buffer (5%): ₹${costs.emergency_buffer.total.toLocaleString('en-IN')}
    Details: ${costs.emergency_buffer.desc}
 -----------------------------------------
 TOTAL ESTIMATED BUDGET: ₹${costs.total_estimated.toLocaleString('en-IN')}

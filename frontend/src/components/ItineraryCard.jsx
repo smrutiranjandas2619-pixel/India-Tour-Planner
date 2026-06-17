@@ -26,7 +26,6 @@ const ItineraryCard = ({
             <li><b>Food Allowance:</b> ${costs.food.desc} - ₹${costs.food.total.toLocaleString('en-IN')}</li>
             <li><b>Vehicle Hire Charges:</b> ${costs.rental.desc} - ₹${costs.rental.total.toLocaleString('en-IN')}</li>
             <li><b>Fuel Allowances:</b> ${costs.fuel.desc} - ₹${costs.fuel.total.toLocaleString('en-IN')}</li>
-            <li><b>Sightseeing Admission:</b> ${costs.entry_fees.desc} - ₹${costs.entry_fees.total.toLocaleString('en-IN')}</li>
             <li><b>Emergency Contingencies:</b> ${costs.emergency_buffer.desc} - ₹${costs.emergency_buffer.total.toLocaleString('en-IN')}</li>
           </ul>
         </div>

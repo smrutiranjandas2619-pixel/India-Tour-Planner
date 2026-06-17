@@ -560,12 +560,7 @@ def calculate_trip_expenses(destination: str, days: int, travelers: int, budget_
     total_rental_cost = rental_rate * days
     total_fuel_cost = rental_fuel * days
     
-    total_entry_fees = 0
-    for attr in state_info.get("attractions", []):
-        total_entry_fees += attr.get("fee", 0)
-    total_entry_fees = total_entry_fees * travelers
-    
-    subtotal = total_hotel + total_food + total_local_transport + total_rental_cost + total_fuel_cost + total_entry_fees
+    subtotal = total_hotel + total_food + total_local_transport + total_rental_cost + total_fuel_cost
     emergency_buffer = math.ceil(subtotal * 0.05)
     total_budget = subtotal + emergency_buffer
     
@@ -575,7 +570,6 @@ def calculate_trip_expenses(destination: str, days: int, travelers: int, budget_
         "local_transport": { "daily": daily_local_transport, "total": total_local_transport, "desc": "Standard local auto, metro, and local transits" },
         "rental": { "daily": rental_rate, "total": total_rental_cost, "desc": f"Rental: {selected_rental['name'] if selected_rental else 'None'} ({selected_rental['type'] if selected_rental else 'N/A'})" },
         "fuel": { "daily": rental_fuel, "total": total_fuel_cost, "desc": "Estimated fuel based on typical terrain distance" },
-        "entry_fees": { "daily": 0, "total": total_entry_fees, "desc": "Sightseeing entry charges for tourist spots" },
         "emergency_buffer": { "daily": 0, "total": emergency_buffer, "desc": "5% Emergency medical & route deviation allowance" },
         "total_estimated": total_budget,
         "daily_average": math.ceil(total_budget / days)

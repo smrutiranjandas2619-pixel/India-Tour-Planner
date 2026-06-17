@@ -20,14 +20,13 @@ const BudgetCalculator = ({ tripData, onOpenDetails }) => {
     chartInstance.current = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['Hotels', 'Food', 'Rentals', 'Fuel & Transit', 'Entry Fees', 'Emergency Buffer'],
+        labels: ['Hotels', 'Food', 'Rentals', 'Fuel & Transit', 'Emergency Buffer'],
         datasets: [{
           data: [
             costs.hotel.total,
             costs.food.total,
             costs.rental.total,
             costs.fuel.total,
-            costs.entry_fees.total,
             costs.emergency_buffer.total
           ],
           backgroundColor: [
@@ -35,7 +34,6 @@ const BudgetCalculator = ({ tripData, onOpenDetails }) => {
             '#feca57', // marigoldGold
             '#818cf8', // royalIndigo
             '#ff9f43', 
-            '#1dd1a1', // oceanTeal
             '#48dbfb'
           ],
           borderWidth: 1,
@@ -157,14 +155,7 @@ const BudgetCalculator = ({ tripData, onOpenDetails }) => {
           </div>
           <p className="font-bold text-white">₹{costs.fuel.total.toLocaleString('en-IN')}</p>
         </div>
-        {/* Entry fees */}
-        <div className="flex justify-between items-center text-xs p-2 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-lg">
-          <div>
-            <p className="text-white font-semibold"><i className="fa-solid fa-ticket text-slate-400 mr-1.5"></i>Tourist Entry Fees</p>
-            <p className="text-[10px] text-slate-500">{costs.entry_fees.desc}</p>
-          </div>
-          <p className="font-bold text-white">₹{costs.entry_fees.total.toLocaleString('en-IN')}</p>
-        </div>
+
         {/* Emergency buffer */}
         <div className="flex justify-between items-center text-xs p-2 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-lg">
           <div>
