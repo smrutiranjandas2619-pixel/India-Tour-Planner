@@ -1,0 +1,34 @@
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Python / Backend
+__pycache__/
+*.pyc
+backend/__pycache__/
+backend/*.pyc
+.venv/
+env/
+venv/
+
+# Environment Variables & Secrets
+.env
+.env.local
+frontend/.env
+backend/.env
+
+# Local Databases & Store files
+*.db
+*.sqlite
+india_tour_planner.db
+vector_store.json
+vector_db/
+
+# Logs & OS Files
+*.log
+.DS_Store
+Thumbs.db
+error_log.txt
+out.txt
+localtunnel.log

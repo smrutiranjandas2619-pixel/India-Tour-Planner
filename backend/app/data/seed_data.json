@@ -1,0 +1,433 @@
+{
+  "states": {
+    "goa": {
+      "name": "Goa",
+      "capital": "Panaji",
+      "best_season": "November to February",
+      "safety_score": 9.2,
+      "crowd_level": "High",
+      "description": "India's beach paradise, famous for its scenic coastline, Portuguese heritage, vibrant nightlife, and water sports.",
+      "base_costs": {
+        "low": { "hotel": 800, "food": 500, "transport": 400 },
+        "medium": { "hotel": 3000, "food": 1500, "transport": 1200 },
+        "high": { "hotel": 10000, "food": 4000, "transport": 3500 }
+      },
+      "attractions": [
+        { "name": "Baga Beach", "coords": [15.5553, 73.7517], "fee": 0, "desc": "Popular beach known for its water sports, shacks, and vibrant nightlife." },
+        { "name": "Basilica of Bom Jesus", "coords": [15.5009, 73.9116], "fee": 0, "desc": "UNESCO World Heritage site containing the mortal remains of St. Francis Xavier." },
+        { "name": "Dudhsagar Falls", "coords": [15.3179, 74.3149], "fee": 400, "desc": "A four-tiered majestic waterfall on the Mandovi River, looking like a sea of milk." }
+      ],
+      "hidden_gems": [
+        { "name": "Cola Beach", "coords": [15.0543, 73.9864], "desc": "A stunning, secluded beach featuring a unique freshwater lagoon merging with the sea." },
+        { "name": "Chorao Island", "coords": [15.5262, 73.8647], "desc": "Quiet river island hosting the Salim Ali Bird Sanctuary, accessible by ferry." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Fish Curry Rice",
+          "desc": "Spicy, tangy coconut-based fish curry served with warm red rice.",
+          "type": "non-veg",
+          "avg_cost": 250,
+          "best_places": "Fisherman's Wharf, local beach shacks"
+        },
+        {
+          "name": "Bebinca",
+          "desc": "A rich, traditional multi-layered Indo-Portuguese pudding made from coconut milk and ghee.",
+          "type": "veg",
+          "avg_cost": 150,
+          "best_places": "Viva Panjim, bakeries in Margao"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "Activa / Jupiter", "daily_rate": 350, "fuel_estimate": 150, "best_for": "Beaches and narrow coastal streets. Highly recommended for Goa!" },
+        { "type": "Cruiser", "name": "Royal Enfield Classic 350", "daily_rate": 800, "fuel_estimate": 300, "best_for": "Scenic coastal cruising and highway travel." },
+        { "type": "Hatchback", "name": "Maruti Swift", "daily_rate": 1500, "fuel_estimate": 600, "best_for": "Family travel and monsoon weather protection." },
+        { "type": "SUV", "name": "Mahindra Thar (Open Top)", "daily_rate": 3500, "fuel_estimate": 1000, "best_for": "Off-beat terrains and ultimate premium holiday vibes." }
+      ]
+    },
+    "ladakh": {
+      "name": "Ladakh",
+      "capital": "Leh",
+      "best_season": "May to September",
+      "safety_score": 9.5,
+      "crowd_level": "Medium",
+      "description": "The Land of High Passes, featuring majestic cold desert landscapes, deep blue high-altitude lakes, and Tibetan Buddhist culture.",
+      "base_costs": {
+        "low": { "hotel": 1000, "food": 400, "transport": 800 },
+        "medium": { "hotel": 3500, "food": 1000, "transport": 2500 },
+        "high": { "hotel": 12000, "food": 3000, "transport": 6000 }
+      },
+      "attractions": [
+        { "name": "Pangong Tso Lake", "coords": [33.7595, 78.6674], "fee": 20, "desc": "An endorheic high-altitude lake famed for changing shades of blue throughout the day." },
+        { "name": "Magnetic Hill", "coords": [34.1718, 77.3585], "fee": 0, "desc": "A gravity-defying hill where vehicles appear to roll uphill naturally." },
+        { "name": "Diskit Monastery", "coords": [34.5428, 77.2913], "fee": 50, "desc": "Largest Buddhist monastery in Nubra Valley, featuring a giant 32-meter Buddha statue." }
+      ],
+      "hidden_gems": [
+        { "name": "Turtuk Village", "coords": [34.8436, 76.8335], "desc": "The last village on the Indian border, rich in apricot trees and Balti culture." },
+        { "name": "Basgo Monastery", "coords": [34.2183, 77.2894], "desc": "Spectacular mud-brick monastery ruins perched precariously on clay cliffs." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Thukpa & Momos",
+          "desc": "Hearty Tibetan noodle soup packed with spices, paired with steamed wheat dumplings.",
+          "type": "veg",
+          "avg_cost": 150,
+          "best_places": "The Tibetan Kitchen in Leh"
+        },
+        {
+          "name": "Butter Tea (Gur Gur Cha)",
+          "desc": "Traditional Himalayan tea churned with yak butter, salt, and tea leaves to prevent chapped lips.",
+          "type": "veg",
+          "avg_cost": 40,
+          "best_places": "Monastery kitchens, local homestays"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Sports bike", "name": "KTM Adventure 390", "daily_rate": 1800, "fuel_estimate": 500, "best_for": "Steep rocky mountain passes and high-altitude highway touring." },
+        { "type": "Cruiser", "name": "Royal Enfield Himalayan 450", "daily_rate": 2000, "fuel_estimate": 600, "best_for": "Unmatched suspension and power on Ladakh gravel streams. Strongly recommended!" },
+        { "type": "SUV", "name": "Toyota Innova / Scorpio (4x4)", "daily_rate": 4500, "fuel_estimate": 1500, "best_for": "Group travel across deep water crossings and unpaved roads." }
+      ]
+    },
+    "rajasthan": {
+      "name": "Rajasthan",
+      "capital": "Jaipur",
+      "best_season": "October to March",
+      "safety_score": 8.8,
+      "crowd_level": "High",
+      "description": "The Land of Kings, showcasing majestic forts, royal palaces, shimmering sand dunes, and vibrant folk traditions.",
+      "base_costs": {
+        "low": { "hotel": 700, "food": 350, "transport": 300 },
+        "medium": { "hotel": 2500, "food": 900, "transport": 1000 },
+        "high": { "hotel": 15000, "food": 3500, "transport": 4000 }
+      },
+      "attractions": [
+        { "name": "Amer Fort, Jaipur", "coords": [26.9855, 75.8513], "fee": 100, "desc": "A massive hill fort known for its artistic Hindu-style elements and Sheesh Mahal (mirror hall)." },
+        { "name": "Lake Pichola, Udaipur", "coords": [24.5713, 73.6791], "fee": 400, "desc": "A scenic freshwater lake housing the famous Taj Lake Palace in its center." },
+        { "name": "Mehrangarh Fort, Jodhpur", "coords": [26.2978, 73.0189], "fee": 200, "desc": "A towering 15th-century fort carved directly out of massive red rocks." }
+      ],
+      "hidden_gems": [
+        { "name": "Abhaneri Stepwell (Chand Baori)", "coords": [27.0069, 76.5986], "desc": "A breathtaking 13-story deep geometrical stepwell dating back over 1000 years." },
+        { "name": "Bhangarh Fort", "coords": [27.0964, 76.2862], "desc": "Infamous ruined city known as India's most haunted location; entry forbidden after sunset." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Dal Baati Churma",
+          "desc": "Baked wheat balls served with mixed lentil curry, loaded with pure desi ghee and sweet jaggery crumbs.",
+          "type": "veg",
+          "avg_cost": 200,
+          "best_places": "Chokhi Dhani, Rawat Misthan Bhandar"
+        },
+        {
+          "name": "Laal Maas",
+          "desc": "A fiery, traditional hot mutton curry cooked in a base of red Mathania chillies and yogurt.",
+          "type": "non-veg",
+          "avg_cost": 400,
+          "best_places": "Handi Restaurant in Jaipur"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "Honda Activa", "daily_rate": 350, "fuel_estimate": 150, "best_for": "Easy exploration of busy walled cities like Jaipur or Jodhpur." },
+        { "type": "Hatchback", "name": "Maruti Swift", "daily_rate": 1300, "fuel_estimate": 500, "best_for": "Navigating highway transits between Jaipur, Ajmer, and Udaipur." },
+        { "type": "SUV", "name": "Mahindra Scorpio", "daily_rate": 2500, "fuel_estimate": 900, "best_for": "Desert highway trips and desert camp access near Jaisalmer." },
+        { "type": "Luxury", "name": "Mercedes C-Class", "daily_rate": 12000, "fuel_estimate": 2500, "best_for": "Premium luxury tour of palace heritage hotels." }
+      ]
+    },
+    "kerala": {
+      "name": "Kerala",
+      "capital": "Thiruvananthapuram",
+      "best_season": "September to March",
+      "safety_score": 9.6,
+      "crowd_level": "Medium",
+      "description": "God's Own Country, famed for its tranquil backwaters, mist-shrouded tea plantations, spice gardens, and Ayurvedic wellness.",
+      "base_costs": {
+        "low": { "hotel": 750, "food": 350, "transport": 350 },
+        "medium": { "hotel": 2800, "food": 1000, "transport": 1400 },
+        "high": { "hotel": 11000, "food": 3000, "transport": 3500 }
+      },
+      "attractions": [
+        { "name": "Alleppey Backwaters", "coords": [9.4981, 76.3388], "fee": 5000, "desc": "Network of lagoons and canals traversed by luxury traditional houseboats (Kettuvallams)." },
+        { "name": "Munnar Tea Gardens", "coords": [10.0889, 77.0595], "fee": 50, "desc": "Infinite rolling hills carpeted in bright green tea bushes, located in the Western Ghats." },
+        { "name": "Athirappilly Waterfalls", "coords": [10.2851, 76.5684], "fee": 50, "desc": "India's Niagra Falls - a roaring 80-foot waterfall featured in several epic blockbusters." }
+      ],
+      "hidden_gems": [
+        { "name": "Marari Beach", "coords": [9.6009, 76.2987], "desc": "An pristine, crowd-free white sand beach surrounded by towering coconut groves." },
+        { "name": "Meenmutty Falls", "coords": [11.6312, 76.2289], "desc": "A spectacular three-tiered forest waterfall accessed via a scenic trek in Wayanad." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Kerala Sadya",
+          "desc": "A grand, multi-course feast featuring 24+ vegetarian dishes served traditionally on a fresh banana leaf.",
+          "type": "veg",
+          "avg_cost": 250,
+          "best_places": "Traditional restaurants in Kochi and Trivandrum"
+        },
+        {
+          "name": "Karimeen Pollichathu",
+          "desc": "Pearl Spot fish marinated in spicy rich masalas, wrapped in a banana leaf, and slow pan-fried.",
+          "type": "non-veg",
+          "avg_cost": 350,
+          "best_places": "Backwater houseboat kitchens, Kumarakom shacks"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "TVS Ntorq", "daily_rate": 400, "fuel_estimate": 150, "best_for": "Leisurely beach-hopping and coastal town exploration." },
+        { "type": "Cruiser", "name": "Royal Enfield Classic", "daily_rate": 900, "fuel_estimate": 350, "best_for": "Climbing the winding hairpin curves to Munnar and Wayanad." },
+        { "type": "Hatchback", "name": "Hyundai i20", "daily_rate": 1600, "fuel_estimate": 600, "best_for": "Comfortable family road trips through heavy monsoon downpours." }
+      ]
+    },
+    "kashmir": {
+      "name": "Kashmir",
+      "capital": "Srinagar",
+      "best_season": "March to August (Spring/Summer), December to February (Snow)",
+      "safety_score": 8.5,
+      "crowd_level": "High",
+      "description": "Heaven on Earth, famous for its snow-capped peaks, crystal-clear lakes, traditional Shikara boats, and vibrant flower valleys.",
+      "base_costs": {
+        "low": { "hotel": 1000, "food": 400, "transport": 600 },
+        "medium": { "hotel": 3500, "food": 1200, "transport": 2000 },
+        "high": { "hotel": 14000, "food": 3500, "transport": 4500 }
+      },
+      "attractions": [
+        { "name": "Dal Lake, Srinagar", "coords": [34.1038, 74.8715], "fee": 500, "desc": "Srinagar's jewel, famous for floating gardens, wooden houseboats, and Shikara rides." },
+        { "name": "Gulmarg Gondola", "coords": [34.0484, 74.3804], "fee": 950, "desc": "One of the highest cable cars in the world, taking you to pristine snow-covered Apharwat Peak." },
+        { "name": "Betaab Valley, Pahalgam", "coords": [34.0253, 75.3444], "fee": 100, "desc": "Stunning alpine meadow bordered by dense pine forests and the rushing Lidder River." }
+      ],
+      "hidden_gems": [
+        { "name": "Chatpal Valley", "coords": [33.5234, 75.2536], "desc": "An untouched, ethereal valley with babbling brooks, wooden bridges, and zero cellular networks." },
+        { "name": "Lolab Valley", "coords": [34.4539, 74.3811], "desc": "A peaceful fruit-growing orchard valley covered with pristine forest fringes." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Kashmiri Wazwan (Rogan Josh)",
+          "desc": "A multi-course royal banquet, featuring tender mutton slow-cooked in aromatic Kashmiri spices and alkanet flower extract.",
+          "type": "non-veg",
+          "avg_cost": 500,
+          "best_places": "Mughal Darbar, Ahdoos in Srinagar"
+        },
+        {
+          "name": "Kahwa",
+          "desc": "Exquisite saffron-infused green tea brewed with cinnamon, cardamom, and finished with crushed almonds.",
+          "type": "veg",
+          "avg_cost": 60,
+          "best_places": "Local tea stalls, Shikara vendor boats"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Cruiser", "name": "Royal Enfield Bullet 350", "daily_rate": 1000, "fuel_estimate": 400, "best_for": "Riding down the National Highway from Jammu to Srinagar." },
+        { "type": "SUV", "name": "Toyota Innova Crysta", "daily_rate": 3800, "fuel_estimate": 1200, "best_for": "Safest choice for groups dealing with high altitude curves and snow." }
+      ]
+    },
+    "himachal": {
+      "name": "Himachal Pradesh",
+      "capital": "Shimla",
+      "best_season": "March to June (Summer), October to February (Snow)",
+      "safety_score": 9.4,
+      "crowd_level": "High",
+      "description": "The Land of Snows, featuring high mountain valleys, roaring rivers, pine forests, and adventure hubs like Manali and Bir Billing.",
+      "base_costs": {
+        "low": { "hotel": 800, "food": 400, "transport": 500 },
+        "medium": { "hotel": 3000, "food": 1100, "transport": 1600 },
+        "high": { "hotel": 12000, "food": 3000, "transport": 4000 }
+      },
+      "attractions": [
+        { "name": "Solang Valley, Manali", "coords": [32.3167, 77.1667], "fee": 50, "desc": "Adventure sport playground known for paragliding, zorbing, and beautiful snow pistes." },
+        { "name": "Hadimba Temple, Manali", "coords": [32.2505, 77.1772], "fee": 0, "desc": "A beautiful 16th-century wooden temple situated inside a dense deodar forest." },
+        { "name": "Spiti Valley (Kaza)", "coords": [32.2223, 78.0708], "fee": 0, "desc": "A majestic high-altitude cold desert valley hosting ancient clifftop monasteries." }
+      ],
+      "hidden_gems": [
+        { "name": "Jibhi", "coords": [31.6371, 77.3374], "desc": "A quiet, green forest hamlet featuring serene wooden cottages and cascading waterfalls." },
+        { "name": "Barot Valley", "coords": [31.9967, 76.8486], "desc": "An uncrowded fishing valley flanked by terraced hills, perfect for trekking." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Dham",
+          "desc": "A traditional festive mid-day meal containing rice, lentils, madra (kidney beans in yogurt), and sweet rice.",
+          "type": "veg",
+          "avg_cost": 180,
+          "best_places": "Heritage stalls in Kangra and Chamba"
+        },
+        {
+          "name": "Siddu",
+          "desc": "Yeast-risen steamed wheat bread stuffed with poppy seeds, dry fruits, or dal, eaten hot with melted ghee.",
+          "type": "veg",
+          "avg_cost": 80,
+          "best_places": "Local dhabas in Manali and Shimla"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Sports bike", "name": "KTM Duke 390", "daily_rate": 1500, "fuel_estimate": 450, "best_for": "Thrilling rides along the hairpin bends of Himalayan highways." },
+        { "type": "Cruiser", "name": "Royal Enfield Himalayan", "daily_rate": 1800, "fuel_estimate": 500, "best_for": "Unbeaten comfort on broken Spiti roads and rocky landslides. Recommended!" },
+        { "type": "SUV", "name": "Mahindra Thar 4x4", "daily_rate": 3500, "fuel_estimate": 1100, "best_for": "Tackling river crossings and snowy road patches in winters." }
+      ]
+    },
+    "delhi": {
+      "name": "Delhi",
+      "capital": "New Delhi",
+      "best_season": "October to March",
+      "safety_score": 8.0,
+      "crowd_level": "High",
+      "description": "India's capital territory - a massive historical metropolis combining Mughal heritage, British-era architecture, and high-tech urbanity.",
+      "base_costs": {
+        "low": { "hotel": 700, "food": 300, "transport": 200 },
+        "medium": { "hotel": 2500, "food": 800, "transport": 800 },
+        "high": { "hotel": 12000, "food": 3000, "transport": 3000 }
+      },
+      "attractions": [
+        { "name": "Qutub Minar", "coords": [28.5244, 77.1855], "fee": 40, "desc": "A soaring 73-meter brick minaret built in 1193 by Qutab-ud-din Aibak." },
+        { "name": "Red Fort", "coords": [28.6562, 77.2410], "fee": 50, "desc": "A magnificent 17th-century Mughal red sandstone fortress at the heart of Old Delhi." },
+        { "name": "India Gate", "coords": [28.6129, 77.2295], "fee": 0, "desc": "A grand triumphal arch war memorial dedicated to the soldiers of British Indian Army." }
+      ],
+      "hidden_gems": [
+        { "name": "Agrasen ki Baoli", "coords": [28.6261, 77.2250], "desc": "A deep, haunting ancient stepwell tucked between towering skyscraper business districts." },
+        { "name": "Sanjay Van", "coords": [28.5304, 77.1648], "desc": "A massive, dense urban forest reserve populated by jackals, deer, and ancient Sufi shrines." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Butter Chicken",
+          "desc": "Tandoori-spiced chicken chunks cooked in a rich, buttery, velvety tomato and cashew cream gravy.",
+          "type": "non-veg",
+          "avg_cost": 350,
+          "best_places": "Moti Mahal, Daryaganj Restaurant"
+        },
+        {
+          "name": "Chole Bhature",
+          "desc": "Spicy, black chickpeas paired with giant, fluffy fried leavened breads, served with pickles and onions.",
+          "type": "veg",
+          "avg_cost": 100,
+          "best_places": "Sita Ram Diwan Chand, local Connaught Place stalls"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "Honda Activa", "daily_rate": 350, "fuel_estimate": 150, "best_for": "Slipping through narrow commercial lanes and bazaar alleys." },
+        { "type": "Hatchback", "name": "Maruti Swift", "daily_rate": 1200, "fuel_estimate": 500, "best_for": "Comfortable intra-city travel across extensive ring roads." }
+      ]
+    },
+    "maharashtra": {
+      "name": "Maharashtra (Mumbai/Pune)",
+      "capital": "Mumbai",
+      "best_season": "October to March",
+      "safety_score": 9.1,
+      "crowd_level": "High",
+      "description": "A dynamic powerhouse state containing India's financial capital Mumbai, historic hill forts of Shivaji, and the green Western Ghats.",
+      "base_costs": {
+        "low": { "hotel": 1000, "food": 350, "transport": 250 },
+        "medium": { "hotel": 3500, "food": 1200, "transport": 1200 },
+        "high": { "hotel": 15000, "food": 3500, "transport": 3500 }
+      },
+      "attractions": [
+        { "name": "Gateway of India, Mumbai", "coords": [18.9220, 72.8347], "fee": 0, "desc": "An iconic stone arch monument built to commemorate the visit of King George V in 1911." },
+        { "name": "Marine Drive", "coords": [18.9433, 72.8230], "fee": 0, "desc": "A sweeping C-shaped beach boulevard famous for spectacular sunset views over the Arabian Sea." },
+        { "name": "Ajanta & Ellora Caves", "coords": [20.0258, 75.1780], "fee": 40, "desc": "Ancient rock-cut temples and caves featuring intricate Buddhist carvings and Hindu monoliths." }
+      ],
+      "hidden_gems": [
+        { "name": "Sandhan Valley", "coords": [19.6166, 73.6938], "desc": "A breathtaking water-carved grand canyon gorge with cliffs rising 300 feet high." },
+        { "name": "Harihar Fort", "coords": [19.9037, 73.4735], "desc": "Famous hill fortress accessible via near-vertical rock-cut steps carved out of a sheer peak." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Vada Pav",
+          "desc": "The 'Indian Burger' - a deep-fried spiced potato dumpling served inside a soft bread bun smeared with garlic chutney.",
+          "type": "veg",
+          "avg_cost": 25,
+          "best_places": "Kirti College Vada Pav, local street stalls"
+        },
+        {
+          "name": "Misal Pav",
+          "desc": "A fiery sprout curry garnished with crisp gram flour noodles (farsan), raw onions, squeezed lemon, and hot buttered buns.",
+          "type": "veg",
+          "avg_cost": 70,
+          "best_places": "Katakirr in Pune, local Mamledar outlets in Thane"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "Activa 6G", "daily_rate": 350, "fuel_estimate": 150, "best_for": "Beating notorious peak-hour traffic in Mumbai or Pune." },
+        { "type": "Hatchback", "name": "Hyundai Grand i10", "daily_rate": 1500, "fuel_estimate": 500, "best_for": "Weekend drives up the Mumbai-Pune Expressway to Lonavala." },
+        { "type": "SUV", "name": "Tata Harrier", "daily_rate": 2800, "fuel_estimate": 900, "best_for": "Climbing wet Western Ghat hairpin bends during monsoon." }
+      ]
+    },
+    "west_bengal": {
+      "name": "West Bengal",
+      "capital": "Kolkata",
+      "best_season": "October to March",
+      "safety_score": 8.9,
+      "crowd_level": "High",
+      "description": "A culturally rich state stretching from the mighty Himalayas in Darjeeling to the mangrove deltas of Sundarbans.",
+      "base_costs": {
+        "low": { "hotel": 700, "food": 300, "transport": 200 },
+        "medium": { "hotel": 2600, "food": 800, "transport": 1000 },
+        "high": { "hotel": 11000, "food": 2500, "transport": 3000 }
+      },
+      "attractions": [
+        { "name": "Victoria Memorial, Kolkata", "coords": [22.5448, 88.3426], "fee": 60, "desc": "A spectacular white marble palace monument built during British rule, surrounded by manicured lawns." },
+        { "name": "Darjeeling Toy Train", "coords": [27.0433, 88.2625], "fee": 1500, "desc": "UNESCO heritage narrow-gauge steam railway winding through stunning tea plantations and misty mountains." },
+        { "name": "Sundarbans National Park", "coords": [21.9497, 89.1833], "fee": 200, "desc": "The world's largest mangrove forest reserve, home to the elusive Royal Bengal Tiger." }
+      ],
+      "hidden_gems": [
+        { "name": "Lepchajagat", "coords": [27.0204, 88.1969], "desc": "A peaceful mountain hamlet blanketed in thick oak and rhododendron forests, with Kanchenjunga views." },
+        { "name": "Chandannagar", "coords": [22.8687, 88.3712], "desc": "A former French colony containing beautiful 18th-century French architecture and riverfront esplanades." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Kolkata Biryani",
+          "desc": "A highly aromatic, subtle basmati rice dish uniquely featuring slow-cooked soft potato and boiled egg.",
+          "type": "non-veg",
+          "avg_cost": 220,
+          "best_places": "Arsalan, Aminia Restaurant in Kolkata"
+        },
+        {
+          "name": "Rosogolla & Sandesh",
+          "desc": "Spongy, sweet cottage cheese balls dipped in warm light sugar syrup, along with condensed milk sweets.",
+          "type": "veg",
+          "avg_cost": 80,
+          "best_places": "K.C. Das, Balaram Mullick & Radharaman Mullick"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "Honda Dio", "daily_rate": 350, "fuel_estimate": 150, "best_for": "Slipping through busy markets in Kolkata." },
+        { "type": "Hatchback", "name": "Maruti WagonR", "daily_rate": 1300, "fuel_estimate": 500, "best_for": "Affordable city transport." },
+        { "type": "SUV", "name": "Mahindra Scorpio (4x4)", "daily_rate": 2800, "fuel_estimate": 900, "best_for": "Navigating the steep curves up to Darjeeling." }
+      ]
+    },
+    "telangana": {
+      "name": "Telangana (Hyderabad)",
+      "capital": "Hyderabad",
+      "best_season": "October to March",
+      "safety_score": 9.1,
+      "crowd_level": "High",
+      "description": "An IT powerhouse showcasing grand Nizami heritage, medieval forts, and world-famous cuisine.",
+      "base_costs": {
+        "low": { "hotel": 700, "food": 300, "transport": 200 },
+        "medium": { "hotel": 2500, "food": 900, "transport": 1000 },
+        "high": { "hotel": 10000, "food": 3000, "transport": 3000 }
+      },
+      "attractions": [
+        { "name": "Charminar", "coords": [17.3616, 78.4747], "fee": 40, "desc": "A historic mosque with four grand minarets, built in 1591 in the center of old Hyderabad bazaar." },
+        { "name": "Golconda Fort", "coords": [17.3833, 78.4011], "fee": 40, "desc": "A massive medieval fortress known for incredible acoustical systems and diamond mines." },
+        { "name": "Ramoji Film City", "coords": [17.2543, 78.6808], "fee": 1200, "desc": "The world's largest integrated film studio complex, filled with sets, rides, and shows." }
+      ],
+      "hidden_gems": [
+        { "name": "Ananthagiri Hills", "coords": [17.3075, 77.8596], "desc": "A scenic green forest region featuring coffee plantations and ancient temple stepwells." },
+        { "name": "Qutb Shahi Tombs", "coords": [17.3912, 78.3970], "desc": "A peaceful complex of grand domed tombs blending Persian and Hindu architecture." }
+      ],
+      "famous_foods": [
+        {
+          "name": "Hyderabadi Biryani",
+          "desc": "World-famous dish made of layers of basmati rice, tender spiced meat, saffron, and mint, slow-cooked in a sealed clay pot (Dum style).",
+          "type": "non-veg",
+          "avg_cost": 300,
+          "best_places": "Paradise Biryani, Bawarchi, Jewel of Nizam"
+        },
+        {
+          "name": "Irani Chai & Osmania Biscuits",
+          "desc": "A velvety thick, creamy tea brewed in copper urns, paired with sweet-salty butter biscuits.",
+          "type": "veg",
+          "avg_cost": 40,
+          "best_places": "Nimrah Cafe near Charminar"
+        }
+      ],
+      "vehicle_rentals": [
+        { "type": "Scooty", "name": "Activa 6G", "daily_rate": 350, "fuel_estimate": 150, "best_for": "Slipping through city traffic." },
+        { "type": "Hatchback", "name": "Renault Triber", "daily_rate": 1400, "fuel_estimate": 500, "best_for": "Economical city exploration." }
+      ]
+    }
+  }
+}
