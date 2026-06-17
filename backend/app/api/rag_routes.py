@@ -55,8 +55,7 @@ async def plan_trip(request: Request, body: PlanTripRequest):
     api_key = body.api_key
     
     if not api_key:
-        # Default user Groq key
-        api_key = ""
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GROQ_API_KEY") or ""
         
     if not os.path.exists(DB_JSON_PATH):
         raise HTTPException(status_code=500, detail="Database file seed_data.json missing.")
@@ -139,7 +138,7 @@ async def chat_consultant(request: Request, body: ChatRequest):
     trip_context = body.trip_context
     
     if not api_key:
-        api_key = ""
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GROQ_API_KEY") or ""
         
     try:
         history_list = []
