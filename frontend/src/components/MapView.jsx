@@ -2,6 +2,33 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { getDynamicHotels, getDynamicRestaurants } from '../utils/seededAccommodations';
 
+// Sync window.L for Leaflet plugins (like markercluster) loaded via script tags
+if (typeof window !== 'undefined') {
+  window.L = L;
+}
+
+// Robust coordinate parser to prevent crashes from empty or malformed coordinates
+const parseCoords = (coords, fallback) => {
+  if (!coords) return fallback;
+  if (Array.isArray(coords)) {
+    if (coords.length >= 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+      return coords;
+    }
+    return fallback;
+  }
+  if (typeof coords === 'string') {
+    const cleaned = coords.trim();
+    if (cleaned === '') return fallback;
+    if (cleaned.includes(',')) {
+      const parsed = cleaned.split(',').map(c => parseFloat(c.trim()));
+      if (parsed.length >= 2 && !isNaN(parsed[0]) && !isNaN(parsed[1])) {
+        return parsed;
+      }
+    }
+  }
+  return fallback;
+};
+
 const MapView = ({ tripData, mapFocus }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -101,24 +128,29 @@ const MapView = ({ tripData, mapFocus }) => {
           );
         }
 
-        // Initialize Marker Cluster Group for secondary pins (hotels, food, attractions)
-        const cluster = L.markerClusterGroup({
-          showCoverageOnHover: false,
-          maxClusterRadius: 45,
-          iconCreateFunction: (c) => {
-            const count = c.getChildCount();
-            return L.divIcon({
-              html: `<div style="background: rgba(129, 140, 248, 0.9); border: 2px solid #fff; border-radius: 50%; color: #fff; font-weight: bold; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.5); font-family: 'Outfit', sans-serif; font-size: 11px;">${count}</div>`,
-              className: 'custom-map-cluster',
-              iconSize: [32, 32]
-            });
-          }
-        });
+        // Initialize Marker Cluster Group safely with standard L.layerGroup as fallback
+        const cluster = (typeof L.markerClusterGroup === 'function')
+          ? L.markerClusterGroup({
+              showCoverageOnHover: false,
+              maxClusterRadius: 45,
+              iconCreateFunction: (c) => {
+                const count = c.getChildCount();
+                return L.divIcon({
+                  html: `<div style="background: rgba(129, 140, 248, 0.9); border: 2px solid #fff; border-radius: 50%; color: #fff; font-weight: bold; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.5); font-family: 'Outfit', sans-serif; font-size: 11px;">${count}</div>`,
+                  className: 'custom-map-cluster',
+                  iconSize: [32, 32]
+                });
+              }
+            })
+          : L.layerGroup();
         clusterGroup.current = cluster;
 
         // Plot Attractions (Yellow pins)
         (attractions || []).forEach((attr) => {
-          let coords = attr.coords || [destCoords[0] + (Math.random() - 0.5) * 0.05, destCoords[1] + (Math.random() - 0.5) * 0.05];
+          const coords = parseCoords(attr.coords, [
+            destCoords[0] + (Math.random() - 0.5) * 0.05,
+            destCoords[1] + (Math.random() - 0.5) * 0.05
+          ]);
           const attrIcon = L.divIcon({
             className: 'custom-attr-icon',
             html: `<div style="background-color: #feca57; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 8px #feca57;"></div>`
@@ -130,7 +162,10 @@ const MapView = ({ tripData, mapFocus }) => {
 
         // Plot Hidden Gems (Teal pins)
         (hidden_gems || []).forEach((gem) => {
-          let coords = gem.coords || [destCoords[0] + (Math.random() - 0.5) * 0.06, destCoords[1] + (Math.random() - 0.5) * 0.06];
+          const coords = parseCoords(gem.coords, [
+            destCoords[0] + (Math.random() - 0.5) * 0.06,
+            destCoords[1] + (Math.random() - 0.5) * 0.06
+          ]);
           const gemIcon = L.divIcon({
             className: 'custom-gem-icon',
             html: `<div style="background-color: #1dd1a1; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 8px #1dd1a1;"></div>`
@@ -153,13 +188,13 @@ const MapView = ({ tripData, mapFocus }) => {
         }
 
         filteredHotels.forEach((hotel, hIdx) => {
-          let coords;
-          if (hotel.coords) {
-            coords = hotel.coords.split(',').map(c => parseFloat(c.trim()));
-          } else {
-            coords = [destCoords[0] + (hIdx + 1) * 0.007 * (Math.random() > 0.5 ? 1 : -1), destCoords[1] + (hIdx + 1) * 0.007 * (Math.random() > 0.5 ? -1 : 1)];
-            hotel.coords = `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
-          }
+          const fallbackHotelCoords = [
+            destCoords[0] + (hIdx + 1) * 0.007 * (Math.random() > 0.5 ? 1 : -1),
+            destCoords[1] + (hIdx + 1) * 0.007 * (Math.random() > 0.5 ? -1 : 1)
+          ];
+          const coords = parseCoords(hotel.coords, fallbackHotelCoords);
+          // Sync coordinate representation as a string
+          hotel.coords = `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
 
           const hotelIcon = L.divIcon({
             className: 'custom-hotel-icon',
@@ -193,13 +228,12 @@ const MapView = ({ tripData, mapFocus }) => {
         // Plot Restaurants (Orange pins with food icon)
         const restaurants = getDynamicRestaurants(destCity);
         restaurants.forEach((rest, rIdx) => {
-          let coords;
-          if (rest.coords) {
-            coords = rest.coords.split(',').map(c => parseFloat(c.trim()));
-          } else {
-            coords = [destCoords[0] + (rIdx + 1.5) * 0.009 * (Math.random() > 0.5 ? -1 : 1), destCoords[1] + (rIdx + 1.5) * 0.009 * (Math.random() > 0.5 ? 1 : -1)];
-            rest.coords = `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
-          }
+          const fallbackRestCoords = [
+            destCoords[0] + (rIdx + 1.5) * 0.009 * (Math.random() > 0.5 ? -1 : 1),
+            destCoords[1] + (rIdx + 1.5) * 0.009 * (Math.random() > 0.5 ? 1 : -1)
+          ];
+          const coords = parseCoords(rest.coords, fallbackRestCoords);
+          rest.coords = `${coords[0].toFixed(4)}, ${coords[1].toFixed(4)}`;
 
           const restIcon = L.divIcon({
             className: 'custom-rest-icon',
