@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import L from 'leaflet';
+import localL from 'leaflet';
 import { getDynamicHotels, getDynamicRestaurants } from '../utils/seededAccommodations';
 
-// Sync window.L for Leaflet plugins (like markercluster) loaded via script tags
+// Use the global Leaflet instance (loaded via CDN with all plugins attached) or fall back to local import
+const L = (typeof window !== 'undefined' && window.L) ? window.L : localL;
+
+// Expose to window.L just in case other modules look for it
 if (typeof window !== 'undefined') {
   window.L = L;
 }
