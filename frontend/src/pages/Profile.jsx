@@ -99,6 +99,10 @@ const Profile = () => {
   // Dynamic travel statistics calculations
   const uniqueCities = new Set();
   const uniqueStates = new Set();
+  let hotelsCount = 0;
+  let restaurantsCount = 0;
+  let totalBudget = 0;
+
   savedTrips.forEach(trip => {
     if (trip.destination) {
       const parts = trip.destination.split(',').map(s => s.trim());
@@ -106,10 +110,40 @@ const Profile = () => {
       if (parts[1]) uniqueStates.add(parts[1]);
       else uniqueStates.add(parts[0]);
     }
+    
+    // Estimate/aggregate hotels and restaurants recommendations
+    const tripHotels = trip.hotels || trip.cost_breakdown?.hotels;
+    if (Array.isArray(tripHotels) && tripHotels.length > 0) {
+      hotelsCount += tripHotels.length;
+    } else {
+      hotelsCount += Math.min(15, Math.max(3, Math.round((trip.days || 5) * 0.8)));
+    }
+
+    const tripRest = trip.restaurants || trip.cost_breakdown?.restaurants;
+    if (Array.isArray(tripRest) && tripRest.length > 0) {
+      restaurantsCount += tripRest.length;
+    } else {
+      restaurantsCount += Math.min(25, Math.max(5, (trip.days || 5) * 1.5));
+    }
+
+    const cost = trip.total_cost || trip.cost_breakdown?.total_estimated || 0;
+    totalBudget += cost;
   });
 
   const citiesCount = uniqueCities.size || 0;
   const statesCount = uniqueStates.size || 0;
+  hotelsCount = Math.round(hotelsCount);
+  restaurantsCount = Math.round(restaurantsCount);
+
+  const formatBudget = (amount) => {
+    if (amount >= 100000) {
+      return `₹${(amount / 100000).toFixed(1)}L`;
+    }
+    if (amount >= 1000) {
+      return `₹${(amount / 1000).toFixed(1)}K`;
+    }
+    return `₹${amount}`;
+  };
 
   const handleUpdateNameSubmit = async (e) => {
     e.preventDefault();
@@ -216,50 +250,20 @@ const Profile = () => {
   };
 
   const getRecentActivitiesList = () => {
-    const mockActivities = [
-      {
-        id: 'mock-1',
-        destination: 'Ahmedabad ➔ Bhubaneswar',
-        created_at: '2026-05-22',
-        days: 2,
-        relativeTime: '2 Days Ago',
-        image: 'https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?auto=format&fit=crop&w=150&q=80'
-      },
-      {
-        id: 'mock-2',
-        destination: 'Bhubaneswar ➔ Gangtok',
-        created_at: '2026-05-15',
-        days: 7,
-        relativeTime: '1 Week Ago',
-        image: 'https://images.unsplash.com/photo-1578593139832-6a75f85b6727?auto=format&fit=crop&w=150&q=80'
-      },
-      {
-        id: 'mock-3',
-        destination: 'Delhi ➔ Jaipur',
-        created_at: '2026-05-02',
-        days: 21,
-        relativeTime: '3 Weeks Ago',
-        image: 'https://images.unsplash.com/photo-1477584305590-38772fc21133?auto=format&fit=crop&w=150&q=80'
-      }
-    ];
-
     if (savedTrips.length === 0) {
-      return mockActivities;
+      return [];
     }
 
     return savedTrips.slice(0, 3).map((trip, idx) => {
       let relativeTime = 'Recently';
-      const diffMs = Date.now() - new Date(trip.created_at || Date.now()).getTime();
+      const savedDate = trip.saved_at || trip.created_at;
+      const diffMs = Date.now() - new Date(savedDate || Date.now()).getTime();
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
       if (diffDays === 0) relativeTime = 'Today';
       else if (diffDays === 1) relativeTime = 'Yesterday';
       else if (diffDays < 7) relativeTime = `${diffDays} Days Ago`;
       else if (diffDays < 30) relativeTime = `${Math.floor(diffDays / 7)} Week${Math.floor(diffDays / 7) > 1 ? 's' : ''} Ago`;
       else relativeTime = `${Math.floor(diffDays / 30)} Month${Math.floor(diffDays / 30) > 1 ? 's' : ''} Ago`;
-
-      if (idx < mockActivities.length && !trip.created_at) {
-        relativeTime = mockActivities[idx].relativeTime;
-      }
 
       let image = 'https://images.unsplash.com/photo-1506469717960-433cd8b6b99e?auto=format&fit=crop&w=150&q=80';
       const destLower = (trip.destination || '').toLowerCase();
@@ -273,8 +277,6 @@ const Profile = () => {
         image = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80';
       } else if (destLower.includes('rishikesh')) {
         image = 'https://images.unsplash.com/photo-1545638190-27a1b32d018d?auto=format&fit=crop&w=150&q=80';
-      } else if (idx < mockActivities.length) {
-        image = mockActivities[idx].image;
       }
 
       const destText = trip.start_location && trip.destination 
@@ -284,7 +286,7 @@ const Profile = () => {
       return {
         id: trip.id || `trip-${idx}`,
         destination: destText,
-        created_at: trip.created_at,
+        saved_at: savedDate,
         relativeTime,
         image,
         tripData: trip
@@ -636,7 +638,7 @@ const Profile = () => {
                   <i className="fa-solid fa-plane-departure text-sm"></i>
                 </div>
                 <div>
-                  <span className="text-xl font-black text-white block leading-tight">{tripsCount || 18}</span>
+                  <span className="text-xl font-black text-white block leading-tight">{tripsCount}</span>
                   <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5 block">Trips Planned</span>
                 </div>
               </div>
@@ -647,7 +649,7 @@ const Profile = () => {
                   <i className="fa-solid fa-city text-sm"></i>
                 </div>
                 <div>
-                  <span className="text-xl font-black text-white block leading-tight">{citiesCount || 34}</span>
+                  <span className="text-xl font-black text-white block leading-tight">{citiesCount}</span>
                   <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5 block">Cities Explored</span>
                 </div>
               </div>
@@ -658,7 +660,7 @@ const Profile = () => {
                   <i className="fa-solid fa-file-invoice text-sm"></i>
                 </div>
                 <div>
-                  <span className="text-xl font-black text-white block leading-tight">127</span>
+                  <span className="text-xl font-black text-white block leading-tight">{hotelsCount}</span>
                   <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5 block">Hotels Viewed</span>
                 </div>
               </div>
@@ -669,7 +671,7 @@ const Profile = () => {
                   <i className="fa-solid fa-star text-sm"></i>
                 </div>
                 <div>
-                  <span className="text-xl font-black text-white block leading-tight">{wishlist.length || 89}</span>
+                  <span className="text-xl font-black text-white block leading-tight">{wishlist.length}</span>
                   <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5 block">Attractions Saved</span>
                 </div>
               </div>
@@ -680,7 +682,7 @@ const Profile = () => {
                   <i className="fa-solid fa-utensils text-sm"></i>
                 </div>
                 <div>
-                  <span className="text-xl font-black text-white block leading-tight">210</span>
+                  <span className="text-xl font-black text-white block leading-tight">{restaurantsCount}</span>
                   <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5 block">Restaurants Viewed</span>
                 </div>
               </div>
@@ -691,7 +693,7 @@ const Profile = () => {
                   <i className="fa-solid fa-clock text-sm"></i>
                 </div>
                 <div>
-                  <span className="text-xl font-black text-white block leading-tight">₹4.2L</span>
+                  <span className="text-xl font-black text-white block leading-tight">{formatBudget(totalBudget)}</span>
                   <span className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5 block">Total Budget Planned</span>
                 </div>
               </div>
@@ -715,30 +717,49 @@ const Profile = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              {recentActivities.map((act) => (
-                <div 
-                  key={act.id} 
-                  className="flex items-center justify-between gap-4 p-3.5 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl hover:border-slate-800/80 transition duration-200"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0">
-                    <img 
-                      src={act.image} 
-                      alt={act.destination} 
-                      className="w-12 h-12 rounded-xl object-cover shrink-0 border border-slate-850"
-                    />
-                    <div className="min-w-0">
-                      <h4 className="text-sm font-extrabold text-white truncate leading-snug">{act.destination}</h4>
-                      <p className="text-[11px] text-slate-500 font-medium mt-0.5 uppercase tracking-wider">
-                        Planned on {new Date(act.created_at || '2026-05-22').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </p>
+              {recentActivities.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-8 px-4 text-center bg-slate-950/20 border border-dashed border-slate-800 rounded-xl">
+                  <div className="w-12 h-12 rounded-full bg-slate-900/60 flex items-center justify-center text-slate-500 mb-3 border border-slate-800">
+                    <i className="fa-regular fa-calendar-plus text-lg"></i>
+                  </div>
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">No Recent Activity</p>
+                  <p className="text-[11px] text-slate-500 mt-1 max-w-[240px]">
+                    You haven't planned any trips yet. Create your first itinerary to see it here!
+                  </p>
+                  <button 
+                    onClick={() => navigate('/dashboard')}
+                    className="mt-3.5 px-4 py-1.5 bg-sunsetCoral hover:bg-sunsetCoral/95 text-white text-[10px] font-extrabold uppercase tracking-wider rounded-lg transition duration-200 shadow-md cursor-pointer"
+                  >
+                    Plan A Trip
+                  </button>
+                </div>
+              ) : (
+                recentActivities.map((act) => (
+                  <div 
+                    key={act.id} 
+                    className="flex items-center justify-between gap-4 p-3.5 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl hover:border-slate-850 transition duration-200 cursor-pointer"
+                    onClick={() => handleReloadTrip(act.tripData)}
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <img 
+                        src={act.image} 
+                        alt={act.destination} 
+                        className="w-12 h-12 rounded-xl object-cover shrink-0 border border-slate-850"
+                      />
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-extrabold text-white truncate leading-snug">{act.destination}</h4>
+                        <p className="text-[11px] text-slate-500 font-medium mt-0.5 uppercase tracking-wider">
+                          Planned on {new Date(act.saved_at || Date.now()).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="px-3.5 py-1.5 bg-slate-950/45 border border-slate-850 text-slate-400 text-[10px] font-bold rounded-full whitespace-nowrap">
+                      {act.relativeTime}
                     </div>
                   </div>
-
-                  <div className="px-3.5 py-1.5 bg-slate-950/45 border border-slate-850 text-slate-400 text-[10px] font-bold rounded-full whitespace-nowrap">
-                    {act.relativeTime}
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
