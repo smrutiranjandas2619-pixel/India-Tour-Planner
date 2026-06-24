@@ -1,4 +1,25 @@
 import os
+import sys
+
+# Ensure backend directory is in sys.path so app module is discoverable
+base_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.abspath(os.path.join(base_dir, ".."))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
+# Auto-cleanup old redundant files from backend root folder
+try:
+    for filename in ["diagnose.py", "verify_key.py", "run_tunnel.js", "package.json", "package-lock.json", "localtunnel.log", "out.txt", "error_log.txt"]:
+        file_to_del = os.path.join(backend_dir, filename)
+        if os.path.exists(file_to_del):
+            os.remove(file_to_del)
+    
+    node_modules_path = os.path.join(backend_dir, "node_modules")
+    if os.path.exists(node_modules_path):
+        import shutil
+        shutil.rmtree(node_modules_path, ignore_errors=True)
+except Exception:
+    pass
 
 # Custom lightweight .env parser to avoid extra dependency issues
 def load_env():
@@ -60,7 +81,9 @@ async def catch_exceptions_middleware(request: Request, call_next):
         return await call_next(request)
     except Exception as e:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        log_path = os.path.abspath(os.path.join(base_dir, "../error_log.txt"))
+        log_dir = os.path.abspath(os.path.join(base_dir, "../logs"))
+        os.makedirs(log_dir, exist_ok=True)
+        log_path = os.path.join(log_dir, "error_log.txt")
         with open(log_path, "w", encoding="utf-8") as f:
             traceback.print_exc(file=f)
         raise e

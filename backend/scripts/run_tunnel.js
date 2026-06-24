@@ -1,5 +1,12 @@
 const localtunnel = require('localtunnel');
 const fs = require('fs');
+const path = require('path');
+
+const logDir = path.join(__dirname, '..', 'logs');
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir, { recursive: true });
+}
+const logPath = path.join(logDir, 'localtunnel.log');
 
 async function startTunnel() {
   console.log('Initializing localtunnel on port 8000...');
@@ -8,8 +15,8 @@ async function startTunnel() {
     const message = `your url is: ${tunnel.url}\n`;
     console.log(message);
     
-    fs.writeFileSync('localtunnel.log', message, 'utf8');
-    console.log('Successfully wrote tunnel URL to localtunnel.log');
+    fs.writeFileSync(logPath, message, 'utf8');
+    console.log(`Successfully wrote tunnel URL to ${logPath}`);
     
     tunnel.on('close', () => {
       console.log('Tunnel closed. Reconnecting in 5 seconds...');
@@ -22,7 +29,7 @@ async function startTunnel() {
     });
   } catch (err) {
     console.error('Error starting localtunnel:', err);
-    fs.writeFileSync('localtunnel.log', `Error: ${err.message}\n`, 'utf8');
+    fs.writeFileSync(logPath, `Error: ${err.message}\n`, 'utf8');
     setTimeout(startTunnel, 5000);
   }
 }

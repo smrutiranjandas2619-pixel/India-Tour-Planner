@@ -44,8 +44,14 @@ India Tour/
 │   │   ├── rag/             # Vector stores and prompt generators
 │   │   ├── utils/           # Cost estimators and scrapers
 │   │   └── main.py          # FastAPI application entry point
-│   ├── requirements.txt     # Python libraries
-│   └── verify_key.py        # Diagnostic API key tool
+│   ├── scripts/             # Diagnostic, setup, and tunnel scripts
+│   │   ├── diagnose.py      # Environment and DB check script
+│   │   ├── verify_key.py    # Firebase/Google API key verification script
+│   │   └── run_tunnel.js    # Localtunnel exposure script
+│   ├── logs/                # Auto-generated application and tunnel logs
+│   │   ├── error_log.txt    # Exception tracebacks
+│   │   └── localtunnel.log  # Expose URL log
+│   └── requirements.txt     # Python libraries
 │
 ├── frontend/
 │   ├── src/

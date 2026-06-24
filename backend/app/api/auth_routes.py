@@ -96,7 +96,9 @@ async def login(req_body: LoginRequest, request: Request):
         raise HTTPException(status_code=401, detail="Invalid email or password.")
     except Exception as e:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        log_path = os.path.abspath(os.path.join(base_dir, "../../error_log.txt"))
+        log_dir = os.path.abspath(os.path.join(base_dir, "../../logs"))
+        os.makedirs(log_dir, exist_ok=True)
+        log_path = os.path.join(log_dir, "error_log.txt")
         with open(log_path, "w", encoding="utf-8") as f:
             traceback.print_exc(file=f)
         raise e
