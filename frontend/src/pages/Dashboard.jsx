@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [weatherText, setWeatherText] = useState('Clear Skies Active');
   const [travelMode, setTravelMode] = useState('car');
+  const [mobileWorkTab, setMobileWorkTab] = useState('setup'); // 'setup', 'map', 'itinerary', 'finances'
 
   // Interactive slide-out detail drawer & Leaflet sync hooks
   const [detailDrawer, setDetailDrawer] = useState({ open: false, type: null });
@@ -736,325 +737,427 @@ Join the tour or design yours!`;
     }
   }
 
-  return (
-    <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-[1600px] mx-auto p-4">
-      {/* LEFT COLUMN: Inputs, Calculator, Group Spends */}
-      <div className="lg:col-span-4 flex flex-col gap-6">
-        <TripPlannerForm onSubmitPlan={handlePlanTrip} loading={loading} />
-        
-        <BudgetCalculator tripData={tripData} onOpenDetails={(type) => setDetailDrawer({ open: true, type })} />
+  const renderEmptyMobileState = (tabName) => (
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center glass-panel bg-slate-950/20 border border-dashed border-slate-800 rounded-2xl max-w-sm mx-auto mt-10">
+      <div className="w-16 h-16 rounded-full bg-slate-900/60 flex items-center justify-center text-slate-500 mb-4 border border-slate-800">
+        <i className="fa-solid fa-sliders text-2xl text-marigoldGold animate-pulse"></i>
+      </div>
+      <h3 className="text-sm font-bold text-white uppercase tracking-wider">Configure Your Trip</h3>
+      <p className="text-xs text-slate-500 mt-2 max-w-[260px] leading-relaxed">
+        Please fill out and submit the trip configuration form in the <b>Configure</b> tab to unlock your interactive {tabName}!
+      </p>
+      <button 
+        onClick={() => setMobileWorkTab('setup')}
+        className="mt-6 px-5 py-2.5 bg-gradient-to-r from-sunsetCoral to-marigoldGold hover:brightness-110 text-white text-[10px] font-extrabold uppercase tracking-wider rounded-xl transition duration-200 shadow-lg shadow-sunsetCoral/15 cursor-pointer"
+      >
+        Configure Now
+      </button>
+    </div>
+  );
 
-        {/* Group Spends Splitter Widget */}
-        <div className="glass-panel p-5 flex flex-col gap-4">
-          <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-3">
-            <i className="fa-solid fa-people-arrows text-royalIndigo"></i>
-            <h2 className="text-base font-bold text-white uppercase tracking-wider">Group Expense Splitter</h2>
+  return (
+    <div className="flex flex-col gap-0 w-full">
+      {/* Mobile Premium Workspace Switcher Header */}
+      <div className="lg:hidden w-full sticky top-0 z-[200] bg-[#080b11]/90 backdrop-blur-md border-b border-[rgba(255,255,255,0.06)] py-3 px-2 flex justify-around gap-1.5 shrink-0">
+        <button
+          onClick={() => setMobileWorkTab('setup')}
+          className={`flex-1 py-2 px-1 rounded-xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
+            mobileWorkTab === 'setup'
+              ? 'bg-gradient-to-r from-sunsetCoral to-marigoldGold text-white shadow-lg shadow-sunsetCoral/15 scale-[1.03]'
+              : 'bg-slate-900/40 text-slate-400 border border-[rgba(255,255,255,0.03)]'
+          }`}
+        >
+          <i className="fa-solid fa-sliders text-xs"></i>
+          <span>Configure</span>
+        </button>
+        
+        <button
+          onClick={() => setMobileWorkTab('map')}
+          className={`flex-1 py-2 px-1 rounded-xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
+            mobileWorkTab === 'map'
+              ? 'bg-gradient-to-r from-sunsetCoral to-marigoldGold text-white shadow-lg shadow-sunsetCoral/15 scale-[1.03]'
+              : 'bg-slate-900/40 text-slate-400 border border-[rgba(255,255,255,0.03)]'
+          }`}
+        >
+          <i className="fa-solid fa-map-location-dot text-xs"></i>
+          <span>Map & Route</span>
+        </button>
+
+        <button
+          onClick={() => setMobileWorkTab('itinerary')}
+          className={`flex-1 py-2 px-1 rounded-xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
+            mobileWorkTab === 'itinerary'
+              ? 'bg-gradient-to-r from-sunsetCoral to-marigoldGold text-white shadow-lg shadow-sunsetCoral/15 scale-[1.03]'
+              : 'bg-slate-900/40 text-slate-400 border border-[rgba(255,255,255,0.03)]'
+          }`}
+        >
+          <i className="fa-solid fa-route text-xs"></i>
+          <span>Itinerary</span>
+        </button>
+
+        <button
+          onClick={() => setMobileWorkTab('finances')}
+          className={`flex-1 py-2 px-1 rounded-xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
+            mobileWorkTab === 'finances'
+              ? 'bg-gradient-to-r from-sunsetCoral to-marigoldGold text-white shadow-lg shadow-sunsetCoral/15 scale-[1.03]'
+              : 'bg-slate-900/40 text-slate-400 border border-[rgba(255,255,255,0.03)]'
+          }`}
+        >
+          <i className="fa-solid fa-wallet text-xs"></i>
+          <span>Expense Splitter</span>
+        </button>
+      </div>
+
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-[1600px] mx-auto p-4 w-full">
+        {/* LEFT COLUMN: Inputs, Calculator, Group Spends */}
+        <div className={`lg:col-span-4 flex-col gap-6 lg:flex ${
+          mobileWorkTab === 'setup' || mobileWorkTab === 'finances' ? 'flex' : 'hidden'
+        }`}>
+          {/* Trip Planner form - only in setup tab on mobile */}
+          <div className={`lg:block ${mobileWorkTab === 'setup' ? 'block' : 'hidden'}`}>
+            <TripPlannerForm onSubmitPlan={handlePlanTrip} loading={loading} />
           </div>
           
-          <div className="flex flex-col gap-3">
-            {/* Add Member Inputs */}
-            <div className="flex gap-2">
-              <input 
-                type="text" 
-                value={newMember}
-                onChange={(e) => setNewMember(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && addMember()}
-                className="glass-input p-2 flex-grow text-xs" 
-                placeholder="Add traveler name..."
-              />
-              <button 
-                onClick={addMember}
-                className="px-3 bg-royalIndigo hover:bg-indigo-600 rounded-lg text-xs font-semibold text-white transition active:scale-95"
-              >
-                Add
-              </button>
-            </div>
-            
-            {/* Members chips rendering */}
-            <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto">
-              {members.map((m, idx) => (
-                <span 
-                  key={idx}
-                  className="px-2.5 py-1 bg-slate-900 border border-[rgba(255,255,255,0.05)] rounded-full text-[10px] text-slate-300 font-bold flex items-center gap-1.5"
-                >
-                  <span>{m}</span>
-                  {m !== 'You' && (
-                    <button onClick={() => removeMember(m)} className="text-rose-400 hover:text-rose-500 font-black"><i className="fa-solid fa-xmark"></i></button>
-                  )}
-                </span>
-              ))}
-            </div>
+          {/* Budget Calculator - only in setup tab on mobile */}
+          <div className={`lg:block ${mobileWorkTab === 'setup' && tripData ? 'block mt-2' : 'hidden'}`}>
+            <BudgetCalculator tripData={tripData} onOpenDetails={(type) => setDetailDrawer({ open: true, type })} />
+          </div>
 
-            {/* Add Spend Inputs */}
-            <div className="grid grid-cols-2 gap-2 mt-1">
-              <input 
-                type="text" 
-                value={expenseItem}
-                onChange={(e) => setExpenseItem(e.target.value)}
-                className="glass-input p-2 text-[11px]" 
-                placeholder="Item (e.g. Dinner)"
-              />
-              <input 
-                type="number" 
-                value={expenseAmount}
-                onChange={(e) => setExpenseAmount(e.target.value)}
-                className="glass-input p-2 text-[11px]" 
-                placeholder="Amount (₹)"
-              />
-            </div>
-            
-            {/* Log Spend Action Button */}
-            <div className="grid grid-cols-2 gap-2">
-              <select 
-                value={expensePayer}
-                onChange={(e) => setExpensePayer(e.target.value)}
-                className="glass-input p-2 text-[11px] bg-darkSlate"
-              >
-                <option value="">Paid By...</option>
-                {members.map((m, idx) => (
-                  <option key={idx} value={m}>{m}</option>
-                ))}
-              </select>
-              <button 
-                onClick={addExpense}
-                className="py-2 bg-slate-800 hover:bg-slate-700 border border-[rgba(255,255,255,0.08)] rounded-lg text-xs font-semibold text-white transition duration-300"
-              >
-                <i className="fa-solid fa-plus text-royalIndigo mr-1"></i> Log Spend
-              </button>
-            </div>
-
-            {/* Spends Ledger Spends List */}
-            <div className="flex flex-col gap-1.5 max-h-[120px] overflow-y-auto mt-1">
-              {expenses.map((exp, idx) => (
-                <div key={idx} className="flex justify-between items-center text-[10px] p-2 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-lg ledger-spend-item">
-                  <span className="text-slate-400"><b>{exp.payer}</b> spent <b>₹{exp.amount}</b> on <i>{exp.item}</i></span>
+          {/* Group Spends Splitter - only in finances tab on mobile */}
+          <div className={`lg:flex lg:flex-col lg:gap-6 ${mobileWorkTab === 'finances' ? 'flex flex-col gap-6' : 'hidden'}`}>
+            {!tripData && mobileWorkTab === 'finances' ? (
+              renderEmptyMobileState('Group Spends Splitter')
+            ) : (
+              <div className="glass-panel p-5 flex flex-col gap-4">
+                <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-3">
+                  <i className="fa-solid fa-people-arrows text-royalIndigo"></i>
+                  <h2 className="text-base font-bold text-white uppercase tracking-wider">Group Expense Splitter</h2>
                 </div>
-              ))}
-              {expenses.length === 0 && (
-                <div className="text-[10px] text-slate-500 text-center py-2">No spends logged yet. Ledger is clear!</div>
-              )}
-            </div>
-            
-            {/* Settling calculations output container */}
-            {splitResult && (
-              <div 
-                className="p-3 bg-royalIndigo/10 border border-royalIndigo/20 rounded-xl mt-1 text-[11px] text-slate-300 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: splitResult }}
-              />
+                
+                <div className="flex flex-col gap-3">
+                  {/* Add Member Inputs */}
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={newMember}
+                      onChange={(e) => setNewMember(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && addMember()}
+                      className="glass-input p-2 flex-grow text-xs" 
+                      placeholder="Add traveler name..."
+                    />
+                    <button 
+                      onClick={addMember}
+                      className="px-3 bg-royalIndigo hover:bg-indigo-600 rounded-lg text-xs font-semibold text-white transition active:scale-95 cursor-pointer"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  
+                  {/* Members chips rendering */}
+                  <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto">
+                    {members.map((m, idx) => (
+                      <span 
+                        key={idx}
+                        className="px-2.5 py-1 bg-slate-900 border border-[rgba(255,255,255,0.05)] rounded-full text-[10px] text-slate-300 font-bold flex items-center gap-1.5"
+                      >
+                        <span>{m}</span>
+                        {m !== 'You' && (
+                          <button onClick={() => removeMember(m)} className="text-rose-400 hover:text-rose-500 font-black"><i className="fa-solid fa-xmark"></i></button>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Add Spend Inputs */}
+                  <div className="grid grid-cols-2 gap-2 mt-1">
+                    <input 
+                      type="text" 
+                      value={expenseItem}
+                      onChange={(e) => setExpenseItem(e.target.value)}
+                      className="glass-input p-2 text-[11px]" 
+                      placeholder="Item (e.g. Dinner)"
+                    />
+                    <input 
+                      type="number" 
+                      value={expenseAmount}
+                      onChange={(e) => setExpenseAmount(e.target.value)}
+                      className="glass-input p-2 text-[11px]" 
+                      placeholder="Amount (₹)"
+                    />
+                  </div>
+                  
+                  {/* Log Spend Action Button */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <select 
+                      value={expensePayer}
+                      onChange={(e) => setExpensePayer(e.target.value)}
+                      className="glass-input p-2 text-[11px] bg-darkSlate"
+                    >
+                      <option value="">Paid By...</option>
+                      {members.map((m, idx) => (
+                        <option key={idx} value={m}>{m}</option>
+                      ))}
+                    </select>
+                    <button 
+                      onClick={addExpense}
+                      className="py-2 bg-slate-800 hover:bg-slate-700 border border-[rgba(255,255,255,0.08)] rounded-lg text-xs font-semibold text-white transition duration-300 cursor-pointer"
+                    >
+                      <i className="fa-solid fa-plus text-royalIndigo mr-1"></i> Log Spend
+                    </button>
+                  </div>
+
+                  {/* Spends Ledger Spends List */}
+                  <div className="flex flex-col gap-1.5 max-h-[120px] overflow-y-auto mt-1">
+                    {expenses.map((exp, idx) => (
+                      <div key={idx} className="flex justify-between items-center text-[10px] p-2 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-lg ledger-spend-item">
+                        <span className="text-slate-400"><b>{exp.payer}</b> spent <b>₹{exp.amount}</b> on <i>{exp.item}</i></span>
+                      </div>
+                    ))}
+                    {expenses.length === 0 && (
+                      <div className="text-[10px] text-slate-500 text-center py-2">No spends logged yet. Ledger is clear!</div>
+                    )}
+                  </div>
+                  
+                  {/* Settling calculations output container */}
+                  {splitResult && (
+                    <div 
+                      className="p-3 bg-royalIndigo/10 border border-royalIndigo/20 rounded-xl mt-1 text-[11px] text-slate-300 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: splitResult }}
+                    />
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
-      </div>
 
-      {/* RIGHT COLUMN: Map & Interactive Tab Content */}
-      <div className="lg:col-span-8 flex flex-col gap-6">
-        <div className="flex flex-col gap-3 w-full">
-          {/* Header Live Information Banners */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {/* Live Weather */}
-            <div className="glass-panel p-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-sky-500/10 flex items-center justify-center text-sky-400">
-                <i className="fa-solid fa-cloud-sun text-lg"></i>
-              </div>
-              <div>
-                <p className="text-[9px] text-slate-500 font-bold uppercase">Live Weather</p>
-                <p className="text-xs text-white font-bold leading-tight">{weatherText}</p>
-              </div>
-            </div>
-            {/* Recommended Vehicle */}
-            <div className="glass-panel p-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-400">
-                <i className="fa-solid fa-motorcycle text-lg"></i>
-              </div>
-              <div>
-                <p className="text-[9px] text-slate-500 font-bold uppercase">Rental Preference</p>
-                <p className="text-xs text-white font-bold leading-tight uppercase">{rentalType}</p>
-              </div>
-            </div>
-            {/* Safety Index */}
-            <div className="glass-panel p-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                <i className="fa-solid fa-shield-halved text-lg"></i>
-              </div>
-              <div>
-                <p className="text-[9px] text-slate-500 font-bold uppercase">Safety Index</p>
-                <p className="text-xs text-white font-bold leading-tight">{safetyScore} / 10</p>
-              </div>
-            </div>
-            {/* Crowd density */}
-            <div className="glass-panel p-3 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400">
-                <i className="fa-solid fa-users-rays text-lg"></i>
-              </div>
-              <div>
-                <p className="text-[9px] text-slate-500 font-bold uppercase">Crowd Density</p>
-                <p className="text-xs text-white font-bold leading-tight">{crowdLevel}</p>
-              </div>
-            </div>
+        {/* RIGHT COLUMN: Map & Interactive Tab Content */}
+        <div className={`lg:col-span-8 flex-col gap-6 lg:flex ${
+          mobileWorkTab === 'map' || mobileWorkTab === 'itinerary' ? 'flex' : 'hidden'
+        }`}>
+          {/* MAP & ROUTE TAB CONTENT */}
+          <div className={`flex flex-col gap-3 w-full lg:flex ${mobileWorkTab === 'map' ? 'flex' : 'hidden'}`}>
+            {!tripData && mobileWorkTab === 'map' ? (
+              renderEmptyMobileState('Interactive Map & Route Analytics')
+            ) : (
+              <>
+                {/* Header Live Information Banners */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {/* Live Weather */}
+                  <div className="glass-panel p-3 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-sky-500/10 flex items-center justify-center text-sky-400">
+                      <i className="fa-solid fa-cloud-sun text-lg"></i>
+                    </div>
+                    <div>
+                      <p className="text-[9px] text-slate-500 font-bold uppercase">Live Weather</p>
+                      <p className="text-xs text-white font-bold leading-tight">{weatherText}</p>
+                    </div>
+                  </div>
+                  {/* Recommended Vehicle */}
+                  <div className="glass-panel p-3 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-400">
+                      <i className="fa-solid fa-motorcycle text-lg"></i>
+                    </div>
+                    <div>
+                      <p className="text-[9px] text-slate-500 font-bold uppercase">Rental Preference</p>
+                      <p className="text-xs text-white font-bold leading-tight uppercase">{rentalType}</p>
+                    </div>
+                  </div>
+                  {/* Safety Index */}
+                  <div className="glass-panel p-3 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                      <i className="fa-solid fa-shield-halved text-lg"></i>
+                    </div>
+                    <div>
+                      <p className="text-[9px] text-slate-500 font-bold uppercase">Safety Index</p>
+                      <p className="text-xs text-white font-bold leading-tight">{safetyScore} / 10</p>
+                    </div>
+                  </div>
+                  {/* Crowd density */}
+                  <div className="glass-panel p-3 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400">
+                      <i className="fa-solid fa-users-rays text-lg"></i>
+                    </div>
+                    <div>
+                      <p className="text-[9px] text-slate-500 font-bold uppercase">Crowd Density</p>
+                      <p className="text-xs text-white font-bold leading-tight">{crowdLevel}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <MapView tripData={tripData} mapFocus={mapFocus} />
+
+                {/* ================= NEW PANELS SECTION ================= */}
+                {tripData && (
+                  <div className="flex flex-col gap-4 mt-4 animate-fade-in">
+                    {/* Route Analytics Panel */}
+                    <div className="glass-panel p-5 flex flex-col gap-4 bg-[#0e1420]/45">
+                      <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.05)] pb-3">
+                        <div className="flex items-center gap-2">
+                          <i className="fa-solid fa-route text-royalIndigo"></i>
+                          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-title">Route Analytics Panel</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Travel Mode:</span>
+                          <select
+                            value={travelMode}
+                            onChange={(e) => setTravelMode(e.target.value)}
+                            className="px-2.5 py-1 bg-royalIndigo/10 hover:bg-royalIndigo/20 text-royalIndigo border border-royalIndigo/25 rounded-lg text-[10px] font-bold uppercase cursor-pointer outline-none transition duration-200 focus:ring-1 focus:ring-royalIndigo/50"
+                          >
+                            <option value="car" className="bg-[#0e1420] text-slate-300">🚗 Car</option>
+                            <option value="bus" className="bg-[#0e1420] text-slate-300">🚌 Bus</option>
+                            <option value="train" className="bg-[#0e1420] text-slate-300">🚆 Train</option>
+                            <option value="bike" className="bg-[#0e1420] text-slate-300">🏍️ Bike</option>
+                            <option value="plane" className="bg-[#0e1420] text-slate-300">✈️ Plane</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                        {/* Distance */}
+                        <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
+                          <i className="fa-solid fa-road text-royalIndigo mb-1.5 text-xs"></i>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Total Distance</p>
+                          <p className="text-sm font-extrabold text-white mt-0.5">{calculatedDistance || 'N/A'} km</p>
+                        </div>
+                        {/* Travel Time */}
+                        <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
+                          <i className={`fa-solid ${travelMode === 'car' ? 'fa-car text-marigoldGold' : travelMode === 'bus' ? 'fa-bus text-sky-400' : travelMode === 'train' ? 'fa-train text-emerald-400' : travelMode === 'bike' ? 'fa-motorcycle text-orange-400' : 'fa-plane text-indigo-400'} mb-1.5 text-xs`}></i>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
+                            {travelMode === 'car' ? 'Driving Time' : travelMode === 'bus' ? 'Bus Time' : travelMode === 'train' ? 'Train Time' : travelMode === 'bike' ? 'Riding Time' : 'Flight Time'}
+                          </p>
+                          <p className="text-sm font-extrabold text-white mt-0.5">{travelTimeStr}</p>
+                        </div>
+                        {/* Cost */}
+                        <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
+                          <i className={travelCostIcon}></i>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{travelCostLabel}</p>
+                          <p className="text-sm font-extrabold text-white mt-0.5">{travelCostEst}</p>
+                        </div>
+                        {/* Tolls & Fees */}
+                        <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
+                          <i className={tollsIcon}></i>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{tollsLabel}</p>
+                          <p className="text-sm font-extrabold text-white mt-0.5">{tollsEstVal}</p>
+                        </div>
+                        {/* Route Comfort / Difficulty */}
+                        <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
+                          <i className={difficultyIcon}></i>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Journey Comfort</p>
+                          <p className="text-sm font-extrabold text-white mt-0.5">{routeDifficultyStr}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Weather Forecast & travel alerts row */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* 5-Day Weather Forecast */}
+                      <div className="glass-panel p-5 flex flex-col gap-3 bg-[#0e1420]/45">
+                        <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-2">
+                          <i className="fa-solid fa-cloud-sun text-sky-400"></i>
+                          <h4 className="text-xs font-bold text-white uppercase tracking-wider font-title">
+                            {displayDays}-Day Weather Forecast
+                          </h4>
+                        </div>
+                        <div className={`grid ${gridGap} ${
+                          displayDays === 1 ? 'grid-cols-1' :
+                          displayDays === 2 ? 'grid-cols-2' :
+                          displayDays === 3 ? 'grid-cols-3' :
+                          displayDays === 4 ? 'grid-cols-4' :
+                          'grid-cols-5'
+                        }`}>
+                          {Array.from({ length: displayDays }, (_, i) => i + 1).map((day) => {
+                            const rainPercent = (10 + (day % 3) * 25);
+                            const isRainy = rainPercent > 50;
+                            return (
+                              <div key={day} className={`${cardPadding} bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center flex flex-col items-center justify-center transition duration-300 hover:border-sky-400/30`}>
+                                <p className={`${dayTextSize} text-slate-500 uppercase`}>Day {day}</p>
+                                <i className={`fa-solid ${isRainy ? 'fa-cloud-showers-heavy text-sky-400' : 'fa-sun text-amber-400'} ${iconSize}`}></i>
+                                <p className={`${tempTextSize} text-white`}>{isRainy ? '24°C' : '29°C'}</p>
+                                <p className={`${infoTextSize} text-sky-400`}>{rainPercent}% Rain</p>
+                                <p className={`${descTextSize} text-slate-500 mt-0.5`}>
+                                  {isRainy ? 'Carry Umbrella' : 'Good for Walk'}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* AI Travel Alerts */}
+                      <div className="glass-panel p-5 flex flex-col gap-3 bg-[#0e1420]/45">
+                        <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-2">
+                          <i className="fa-solid fa-triangle-exclamation text-sunsetCoral"></i>
+                          <h4 className="text-xs font-bold text-white uppercase tracking-wider font-title">AI Travel Alerts</h4>
+                        </div>
+                        <div className="flex flex-col gap-2 max-h-[140px] overflow-y-auto">
+                          <div className="flex items-start gap-2.5 p-2 bg-rose-500/10 border border-rose-500/20 rounded-xl">
+                            <i className="fa-solid fa-cloud-showers-heavy text-rose-400 text-xs mt-0.5"></i>
+                            <div>
+                              <p className="text-[10px] text-white font-bold">Heavy Rain Warning (Day 3)</p>
+                              <p className="text-[9px] text-slate-400 mt-0.5">High probability of rain on Day 3. Restricted trail visibility expected.</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2.5 p-2 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                            <i className="fa-solid fa-users-rays text-amber-400 text-xs mt-0.5"></i>
+                            <div>
+                              <p className="text-[10px] text-white font-bold">Peak Season Crowd Density Notice</p>
+                              <p className="text-[9px] text-slate-400 mt-0.5">High tourist density reported. Advance bookings recommended.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
-          <MapView tripData={tripData} mapFocus={mapFocus} />
-
-          {/* ================= NEW PANELS SECTION ================= */}
-          {tripData && (
-            <div className="flex flex-col gap-4 mt-4 animate-fade-in">
-              {/* Route Analytics Panel */}
-              <div className="glass-panel p-5 flex flex-col gap-4 bg-[#0e1420]/45">
-                <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.05)] pb-3">
-                  <div className="flex items-center gap-2">
-                    <i className="fa-solid fa-route text-royalIndigo"></i>
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-title">Route Analytics Panel</h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-slate-400 font-bold uppercase hidden sm:inline">Travel Mode:</span>
-                    <select
-                      value={travelMode}
-                      onChange={(e) => setTravelMode(e.target.value)}
-                      className="px-2.5 py-1 bg-royalIndigo/10 hover:bg-royalIndigo/20 text-royalIndigo border border-royalIndigo/25 rounded-lg text-[10px] font-bold uppercase cursor-pointer outline-none transition duration-200 focus:ring-1 focus:ring-royalIndigo/50"
-                    >
-                      <option value="car" className="bg-[#0e1420] text-slate-300">🚗 Car</option>
-                      <option value="bus" className="bg-[#0e1420] text-slate-300">🚌 Bus</option>
-                      <option value="train" className="bg-[#0e1420] text-slate-300">🚆 Train</option>
-                      <option value="bike" className="bg-[#0e1420] text-slate-300">🏍️ Bike</option>
-                      <option value="plane" className="bg-[#0e1420] text-slate-300">✈️ Plane</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-                  {/* Distance */}
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
-                    <i className="fa-solid fa-road text-royalIndigo mb-1.5 text-xs"></i>
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Total Distance</p>
-                    <p className="text-sm font-extrabold text-white mt-0.5">{calculatedDistance || 'N/A'} km</p>
-                  </div>
-                  {/* Travel Time */}
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
-                    <i className={`fa-solid ${travelMode === 'car' ? 'fa-car text-marigoldGold' : travelMode === 'bus' ? 'fa-bus text-sky-400' : travelMode === 'train' ? 'fa-train text-emerald-400' : travelMode === 'bike' ? 'fa-motorcycle text-orange-400' : 'fa-plane text-indigo-400'} mb-1.5 text-xs`}></i>
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
-                      {travelMode === 'car' ? 'Driving Time' : travelMode === 'bus' ? 'Bus Time' : travelMode === 'train' ? 'Train Time' : travelMode === 'bike' ? 'Riding Time' : 'Flight Time'}
-                    </p>
-                    <p className="text-sm font-extrabold text-white mt-0.5">{travelTimeStr}</p>
-                  </div>
-                  {/* Cost */}
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
-                    <i className={travelCostIcon}></i>
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{travelCostLabel}</p>
-                    <p className="text-sm font-extrabold text-white mt-0.5">{travelCostEst}</p>
-                  </div>
-                  {/* Tolls & Fees */}
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
-                    <i className={tollsIcon}></i>
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{tollsLabel}</p>
-                    <p className="text-sm font-extrabold text-white mt-0.5">{tollsEstVal}</p>
-                  </div>
-                  {/* Route Comfort / Difficulty */}
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center transition duration-300 hover:border-royalIndigo/30">
-                    <i className={difficultyIcon}></i>
-                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Journey Comfort</p>
-                    <p className="text-sm font-extrabold text-white mt-0.5">{routeDifficultyStr}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Weather Forecast & travel alerts row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* 5-Day Weather Forecast */}
-                <div className="glass-panel p-5 flex flex-col gap-3 bg-[#0e1420]/45">
-                  <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-2">
-                    <i className="fa-solid fa-cloud-sun text-sky-400"></i>
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider font-title">
-                      {displayDays}-Day Weather Forecast
-                    </h4>
-                  </div>
-                  <div className={`grid ${gridGap} ${
-                    displayDays === 1 ? 'grid-cols-1' :
-                    displayDays === 2 ? 'grid-cols-2' :
-                    displayDays === 3 ? 'grid-cols-3' :
-                    displayDays === 4 ? 'grid-cols-4' :
-                    'grid-cols-5'
-                  }`}>
-                    {Array.from({ length: displayDays }, (_, i) => i + 1).map((day) => {
-                      const rainPercent = (10 + (day % 3) * 25);
-                      const isRainy = rainPercent > 50;
-                      return (
-                        <div key={day} className={`${cardPadding} bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl text-center flex flex-col items-center justify-center transition duration-300 hover:border-sky-400/30`}>
-                          <p className={`${dayTextSize} text-slate-500 uppercase`}>Day {day}</p>
-                          <i className={`fa-solid ${isRainy ? 'fa-cloud-showers-heavy text-sky-400' : 'fa-sun text-amber-400'} ${iconSize}`}></i>
-                          <p className={`${tempTextSize} text-white`}>{isRainy ? '24°C' : '29°C'}</p>
-                          <p className={`${infoTextSize} text-sky-400`}>{rainPercent}% Rain</p>
-                          <p className={`${descTextSize} text-slate-500 mt-0.5`}>
-                            {isRainy ? 'Carry Umbrella' : 'Good for Walk'}
-                          </p>
+          {/* ITINERARY & TRAVEL GUIDES TAB CONTENT */}
+          <div className={`flex flex-col gap-6 w-full lg:flex ${mobileWorkTab === 'itinerary' ? 'flex' : 'hidden'}`}>
+            {!tripData && mobileWorkTab === 'itinerary' ? (
+              renderEmptyMobileState('AI Itinerary & Travel Guides')
+            ) : (
+              <>
+                {/* Smart Budget Optimizer */}
+                {tripData && (
+                  <div className="glass-panel p-5 flex flex-col gap-3 bg-[#0e1420]/45">
+                    <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-2">
+                      <i className="fa-solid fa-piggy-bank text-emerald-400"></i>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider font-title">Smart Budget Optimizer</h4>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-400 text-xs shrink-0"><i className="fa-solid fa-train"></i></div>
+                        <div>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Travel Savings</p>
+                          <p className="text-xs text-slate-300 font-bold mt-0.5">Save ₹{(2300 * (tripData.travelers || 1)).toLocaleString('en-IN')} by choosing train travel.</p>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* AI Travel Alerts */}
-                <div className="glass-panel p-5 flex flex-col gap-3 bg-[#0e1420]/45">
-                  <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-2">
-                    <i className="fa-solid fa-triangle-exclamation text-sunsetCoral"></i>
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider font-title">AI Travel Alerts</h4>
-                  </div>
-                  <div className="flex flex-col gap-2 max-h-[140px] overflow-y-auto">
-                    <div className="flex items-start gap-2.5 p-2 bg-rose-500/10 border border-rose-500/20 rounded-xl">
-                      <i className="fa-solid fa-cloud-showers-heavy text-rose-400 text-xs mt-0.5"></i>
-                      <div>
-                        <p className="text-[10px] text-white font-bold">Heavy Rain Warning (Day 3)</p>
-                        <p className="text-[9px] text-slate-400 mt-0.5">High probability of rain on Day 3. Restricted trail visibility expected.</p>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2.5 p-2 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                      <i className="fa-solid fa-users-rays text-amber-400 text-xs mt-0.5"></i>
-                      <div>
-                        <p className="text-[10px] text-white font-bold">Peak Season Crowd Density Notice</p>
-                        <p className="text-[9px] text-slate-400 mt-0.5">High tourist density reported. Advance bookings recommended.</p>
+                      <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-400 text-xs shrink-0"><i className="fa-solid fa-hotel"></i></div>
+                        <div>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Lodging Hack</p>
+                          <p className="text-xs text-slate-300 font-bold mt-0.5">Save ₹{(1200 * (tripData.days || 5)).toLocaleString('en-IN')} by staying 3 km outside city center.</p>
+                        </div>
+                      </div>
+                      <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-400 text-xs shrink-0"><i className="fa-solid fa-gas-pump"></i></div>
+                        <div>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Transit Savings</p>
+                          <p className="text-xs text-slate-300 font-bold mt-0.5">Save 15% fuel cost by utilizing regional carpools/group bikes.</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Smart Budget Optimizer */}
-              <div className="glass-panel p-5 flex flex-col gap-3 bg-[#0e1420]/45">
-                <div className="flex items-center gap-2 border-b border-[rgba(255,255,255,0.05)] pb-2">
-                  <i className="fa-solid fa-piggy-bank text-emerald-400"></i>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider font-title">Smart Budget Optimizer</h4>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-400 text-xs shrink-0"><i className="fa-solid fa-train"></i></div>
-                    <div>
-                      <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Travel Savings</p>
-                      <p className="text-xs text-slate-300 font-bold mt-0.5">Save ₹{(2300 * (tripData.travelers || 1)).toLocaleString('en-IN')} by choosing train travel.</p>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center text-indigo-400 text-xs shrink-0"><i className="fa-solid fa-hotel"></i></div>
-                    <div>
-                      <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Lodging Hack</p>
-                      <p className="text-xs text-slate-300 font-bold mt-0.5">Save ₹{(1200 * (tripData.days || 5)).toLocaleString('en-IN')} by staying 3 km outside city center.</p>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-slate-950/20 border border-[rgba(255,255,255,0.03)] rounded-xl flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-400 text-xs shrink-0"><i className="fa-solid fa-gas-pump"></i></div>
-                    <div>
-                      <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Transit Savings</p>
-                      <p className="text-xs text-slate-300 font-bold mt-0.5">Save 15% fuel cost by utilizing regional carpools/group bikes.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ================= AI TRIP SUMMARY & PLANNING PROGRESS ================= */}
-          {tripData && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 animate-fade-in">
-              {/* Summary Card */}
-              <div className="md:col-span-2 glass-panel p-5 flex flex-col gap-4 bg-gradient-to-br from-slate-900/40 to-indigo-950/20">
+                )}
+                
+                {/* AI Trip Summary & Planning Progress */}
+                {tripData && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 animate-fade-in">
+                    {/* Summary Card */}
+                    <div className="md:col-span-2 glass-panel p-5 flex flex-col gap-4 bg-gradient-to-br from-slate-900/40 to-indigo-950/20">
                 <div className="flex justify-between items-center border-b border-[rgba(255,255,255,0.05)] pb-3">
                   <div className="flex items-center gap-2">
                     <i className="fa-solid fa-compass text-sunsetCoral"></i>
@@ -1204,7 +1307,6 @@ Join the tour or design yours!`;
               </div>
             </div>
           )}
-        </div>
 
         {/* Navigation Tabs Bar */}
         <div className="glass-panel p-3 flex gap-1 overflow-x-auto mt-4">
@@ -1483,7 +1585,10 @@ Join the tour or design yours!`;
             </div>
           )}
         </div>
-      </div>
+              </>
+            )}
+          </div>
+        </div>
 
       {/* Right Slide-out Detail Drawer */}
       {detailDrawer.open && (() => {
@@ -1851,6 +1956,7 @@ Join the tour or design yours!`;
         )}
       </div>
     </section>
+    </div>
   );
 };
 
