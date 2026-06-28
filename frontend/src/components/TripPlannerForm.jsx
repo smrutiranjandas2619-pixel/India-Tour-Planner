@@ -1,6 +1,6 @@
-  import React, { useState } from 'react';
+import React, { useState } from 'react';
 
-const INDIAN_CITIES_STATES = [
+const INDIAN_CITIES_STATES = Array.from(new Set([
   // States & UTs
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", 
   "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", 
@@ -52,7 +52,7 @@ const INDIAN_CITIES_STATES = [
   "Bhagalpur, Bihar", "Muzaffarpur, Bihar", "Gaya, Bihar", "Jamshedpur, Jharkhand", 
   "Dhanbad, Jharkhand", "Bokaro, Jharkhand", "Bilaspur, Chhattisgarh", "Durg, Chhattisgarh", 
   "Bhilai, Chhattisgarh", "Korba, Chhattisgarh", "Agartala, Tripura", "Tura, Meghalaya"
-];
+]));
 
 const TripPlannerForm = ({ onSubmitPlan, loading }) => {
   const [startLocation, setStartLocation] = useState('');
