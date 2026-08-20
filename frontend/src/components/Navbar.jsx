@@ -483,8 +483,17 @@ const Navbar = () => {
                 }}
                 className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider transition active:scale-95 border border-[rgba(255,255,255,0.03)]"
               >
-                <i className="fa-solid fa-lightbulb text-amber-400 text-xs w-4 text-center"></i>
-                <span>NORMAL MODE</span>
+                {theme === 'dark' ? (
+                  <>
+                    <i className="fa-solid fa-lightbulb text-amber-400 text-xs w-4 text-center"></i>
+                    <span>NORMAL MODE</span>
+                  </>
+                ) : (
+                  <>
+                    <i className="fa-solid fa-moon text-indigo-400 text-xs w-4 text-center"></i>
+                    <span>DARK MODE</span>
+                  </>
+                )}
               </button>
 
               <button 
