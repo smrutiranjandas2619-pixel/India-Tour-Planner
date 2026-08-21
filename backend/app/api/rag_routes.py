@@ -19,7 +19,9 @@ rag_engine = RAGEngine(
 
 # Seed vector database on startup
 try:
-    rag_engine.initialize_store(api_key=None, force_rebuild=False)
+    startup_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GROQ_API_KEY") or ""
+    # Always rebuild from seed data on startup to ensure persistence survival
+    rag_engine.initialize_store(api_key=startup_key if startup_key else None, force_rebuild=True)
 except Exception as e:
     print(f"Failed to seed vector store on startup: {e}")
 

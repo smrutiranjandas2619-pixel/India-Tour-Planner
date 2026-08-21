@@ -74,7 +74,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-import traceback
+from app.utils.logger import write_safe_error_log
 @app.middleware("http")
 async def catch_exceptions_middleware(request: Request, call_next):
     try:
@@ -84,8 +84,10 @@ async def catch_exceptions_middleware(request: Request, call_next):
         log_dir = os.path.abspath(os.path.join(base_dir, "../logs"))
         os.makedirs(log_dir, exist_ok=True)
         log_path = os.path.join(log_dir, "error_log.txt")
-        with open(log_path, "w", encoding="utf-8") as f:
-            traceback.print_exc(file=f)
+        try:
+            write_safe_error_log(log_path)
+        except Exception:
+            pass
         raise e
 
 

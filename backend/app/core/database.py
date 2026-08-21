@@ -63,7 +63,7 @@ class LibSQLConnectionWrapper:
 
 def get_db_connection():
     """Returns a thread-safe connection to the SQLite database (local or Turso Cloud)."""
-    if TURSO_URL and ("libsql" in TURSO_URL or "turso" in TURSO_URL):
+    if TURSO_URL:
         import libsql
         conn = libsql.connect(TURSO_URL, auth_token=TURSO_TOKEN)
         return LibSQLConnectionWrapper(conn)
