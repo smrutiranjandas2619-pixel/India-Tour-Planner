@@ -1,5 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  setPersistence, 
+  browserLocalPersistence, 
+  onAuthStateChanged,
+  signOut 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 
 const firebaseConfig = {
@@ -22,10 +30,21 @@ try {
   if (!isDemo) {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
+    // Configure local persistence
+    setPersistence(auth, browserLocalPersistence)
+      .catch((e) => console.error("Firebase Auth setPersistence failed:", e));
   }
 } catch (e) {
   console.warn("Firebase client SDK initialization failed (falling back to offline simulated login):", e);
 }
 
-export { auth, GoogleAuthProvider, signInWithPopup };
+export { 
+  auth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  setPersistence, 
+  browserLocalPersistence, 
+  onAuthStateChanged,
+  signOut 
+};
 export default app;

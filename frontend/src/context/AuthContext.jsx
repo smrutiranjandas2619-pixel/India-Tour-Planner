@@ -1,4 +1,5 @@
   import React, { createContext, useState, useEffect, useContext } from 'react';
+import { auth, onAuthStateChanged, signOut } from '../services/firebase';
 
 const AuthContext = createContext(null);
 
@@ -8,20 +9,74 @@ export const AuthProvider = ({ children }) => {
 
   // Check login session status on startup
   useEffect(() => {
+    let unsubscribe = () => {};
+
     const checkAuth = async () => {
+      // 1. Try backend session first
       try {
         const res = await fetch('/api/auth/me');
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
+          setLoading(false);
+          return;
         }
       } catch (err) {
-        console.error("Auth initialization failed:", err);
-      } finally {
+        console.error("Auth initialization backend check failed:", err);
+      }
+
+      // 2. If no backend session, check if there's a persisted Firebase user
+      if (auth) {
+        unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+          if (firebaseUser) {
+            try {
+              const idToken = await firebaseUser.getIdToken();
+              const email = firebaseUser.email;
+              const name = firebaseUser.displayName || email?.split('@')[0] || "User";
+              const avatar = firebaseUser.photoURL;
+              const isPhone = !email && firebaseUser.phoneNumber;
+
+              let res;
+              if (isPhone) {
+                res = await fetch('/api/auth/phone-login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ idToken })
+                });
+              } else {
+                res = await fetch('/api/auth/google-login', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ idToken, email, name, avatar })
+                });
+              }
+
+              if (res && res.ok) {
+                const data = await res.json();
+                setUser(data.user);
+              } else {
+                setUser(null);
+              }
+            } catch (err) {
+              console.error("Auto-restoring Firebase session on backend failed:", err);
+              setUser(null);
+            }
+          } else {
+            setUser(null);
+          }
+          setLoading(false);
+        });
+      } else {
+        // Fallback for simulated/demo mode:
         setLoading(false);
       }
     };
+
     checkAuth();
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const login = async (email, password) => {
@@ -115,6 +170,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      if (auth) {
+        await signOut(auth);
+      }
       const res = await fetch('/api/auth/logout', { method: 'POST' });
       if (res.ok) {
         setUser(null);
