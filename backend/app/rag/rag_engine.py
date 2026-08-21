@@ -280,7 +280,14 @@ class RAGEngine:
                 if res.ok:
                     return res.json()["choices"][0]["message"]["content"]
                 else:
-                    return f"### ❌ Groq Integration Error\nServer returned an error status: {res.status_code}\n`{res.text}`"
+                    try:
+                        models_res = requests.get("https://api.groq.com/openai/v1/models", headers=headers, timeout=10)
+                        if models_res.ok:
+                            available_models = [m["id"] for m in models_res.json().get("data", [])]
+                            return f"### \u274c Groq Integration Error\nServer returned an error status: {res.status_code}\n`{res.text}`\n\n**Available active models in your Groq account:**\n`{', '.join(available_models)}`"
+                    except Exception:
+                        pass
+                    return f"### \u274c Groq Integration Error\nServer returned an error status: {res.status_code}\n`{res.text}`"
             except Exception as e:
                 return f"### ❌ Groq Connection Failed\nError occurred while connecting to Groq completions: `{str(e)}`"
         else:
