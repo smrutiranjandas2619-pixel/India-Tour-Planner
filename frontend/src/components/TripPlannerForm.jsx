@@ -54,6 +54,72 @@ const INDIAN_CITIES_STATES = Array.from(new Set([
   "Bhilai, Chhattisgarh", "Korba, Chhattisgarh", "Agartala, Tripura", "Tura, Meghalaya"
 ]));
 
+const VEHICLE_CATEGORIES = [
+  {
+    id: 'auto',
+    icon: '🤖',
+    name: 'AI Auto',
+    desc: 'Smart Pick'
+  },
+  {
+    id: 'none',
+    icon: '🚫',
+    name: 'No Transport',
+    desc: 'Personal'
+  },
+  {
+    id: 'scooty_rent',
+    icon: '🛵',
+    name: 'Scooty',
+    desc: 'Self-Drive'
+  },
+  {
+    id: 'bike_rent',
+    icon: '🏍️',
+    name: 'Bike',
+    desc: 'Self-Drive'
+  },
+  {
+    id: 'car_rent',
+    icon: '🚗',
+    name: 'Car',
+    desc: 'Self-Drive'
+  },
+  {
+    id: 'chauffeur',
+    icon: '🚕',
+    name: 'Cab / Taxi',
+    desc: 'With Driver'
+  }
+];
+
+const VEHICLE_MODELS = {
+  auto: [
+    { value: 'auto', label: 'AI Recommended Auto', tag: 'Smart Choice' }
+  ],
+  none: [
+    { value: 'none', label: 'Personal / No Vehicle (₹0)', tag: 'Own Vehicle' }
+  ],
+  scooty_rent: [
+    { value: 'scooty', label: 'Scooty (Activa / Ntorq)', tag: '₹350/day' }
+  ],
+  bike_rent: [
+    { value: 'cruiser', label: 'Cruiser Bike (RE Classic 350)', tag: '₹950/day' },
+    { value: 'sports_bike', label: 'Adventure Bike (KTM Duke / Adv)', tag: '₹1400/day' }
+  ],
+  car_rent: [
+    { value: 'hatchback', label: 'Hatchback (Swift / i20)', tag: '₹1400/day' },
+    { value: 'suv', label: 'SUV / Off-Roader (Thar / Scorpio)', tag: '₹2600/day' },
+    { value: 'luxury', label: 'Luxury Premium (Mercedes C-Class)', tag: '₹6500/day' }
+  ],
+  chauffeur: [
+    { value: 'cab_sedan', label: 'Sedan Cab (Dzire / Etios)', tag: 'Driver Included' },
+    { value: 'cab_suv', label: 'SUV Cab (Ertiga / Marazzo)', tag: 'Driver Included' },
+    { value: 'cab_luxury', label: 'Premium Cab (Innova Crysta)', tag: 'VIP Comfort' },
+    { value: 'tempo_traveler', label: 'Tempo Traveler (12-Seater)', tag: 'Group Fleet' }
+  ]
+};
+
 const TripPlannerForm = ({ onSubmitPlan, loading }) => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
@@ -285,64 +351,97 @@ const TripPlannerForm = ({ onSubmitPlan, loading }) => {
           </div>
         </div>
 
-        {/* Vehicle Category & Vehicle Selection (2-Column Grid) */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="flex flex-col gap-1">
-            <label className="text-xs text-slate-400 font-semibold uppercase">Vehicle Category</label>
-            <select 
-              value={vehicleCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className="glass-input p-2.5 text-sm bg-darkSlate"
-            >
-              <option value="auto">AI Recommendation (Auto)</option>
-              <option value="none">No Transport / Personal Vehicle (None)</option>
-              <option value="scooty_rent">Scooty Rental (Self-Drive)</option>
-              <option value="bike_rent">Bike Rental (Self-Drive)</option>
-              <option value="car_rent">Car Rental (Self-Drive)</option>
-              <option value="chauffeur">Cab / Tourist Taxi (Driver Included)</option>
-            </select>
+        {/* Modern Vehicle Category Selector */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs text-slate-400 font-semibold uppercase flex items-center gap-1.5">
+              <span>🚘</span> VEHICLE CATEGORY
+            </label>
+            <span className="text-[10px] text-amber-400/90 font-bold bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
+              {VEHICLE_CATEGORIES.find(c => c.id === vehicleCategory)?.name || 'Selected'}
+            </span>
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-xs text-slate-400 font-semibold uppercase">Vehicle Model</label>
-            <select 
-              value={vehiclePreference}
-              onChange={(e) => setVehiclePreference(e.target.value)}
-              disabled={vehicleCategory === 'auto' || vehicleCategory === 'none'}
-              className="glass-input p-2.5 text-sm bg-darkSlate disabled:opacity-50"
-            >
-              {vehicleCategory === 'auto' && (
-                <option value="auto">AI Recommended Auto</option>
-              )}
-              {vehicleCategory === 'none' && (
-                <option value="none">No Vehicle (₹0 / day)</option>
-              )}
-              {vehicleCategory === 'scooty_rent' && (
-                <option value="scooty">Scooty (Activa / Ntorq)</option>
-              )}
-              {vehicleCategory === 'bike_rent' && (
-                <>
-                  <option value="cruiser">Cruiser Bike (RE Classic 350)</option>
-                  <option value="sports_bike">Adventure Bike (KTM Duke)</option>
-                </>
-              )}
-              {vehicleCategory === 'car_rent' && (
-                <>
-                  <option value="hatchback">Hatchback Car (Swift / i20)</option>
-                  <option value="suv">SUV / Off-Roader (Thar / Scorpio)</option>
-                  <option value="luxury">Luxury Premium Car (Mercedes C)</option>
-                </>
-              )}
-              {vehicleCategory === 'chauffeur' && (
-                <>
-                  <option value="cab_sedan">Sedan Cab (Dzire / Etios)</option>
-                  <option value="cab_suv">SUV Cab (Ertiga / Marazzo)</option>
-                  <option value="cab_luxury">Premium Luxury Cab (Innova Crysta)</option>
-                  <option value="tempo_traveler">Tempo Traveler (12-Seater + Driver)</option>
-                </>
-              )}
-            </select>
+
+          {/* Horizontal scrollable row of icon cards */}
+          <div className="flex gap-2 overflow-x-auto pb-1.5 pt-1 -mx-1 px-1 scrollbar-thin scrollbar-thumb-white/10">
+            {VEHICLE_CATEGORIES.map((cat) => {
+              const isSelected = vehicleCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => handleCategoryChange(cat.id)}
+                  className={`group relative flex-shrink-0 w-24 flex flex-col items-center justify-center p-2.5 rounded-xl border backdrop-blur-md transition-all duration-200 cursor-pointer text-center ${
+                    isSelected
+                      ? 'border-amber-400 bg-amber-400/15 text-white shadow-lg shadow-amber-400/30 scale-105 ring-1 ring-amber-400/50'
+                      : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:bg-white/10 hover:text-slate-200'
+                  }`}
+                >
+                  <span className="text-2xl mb-1 filter drop-shadow transition-transform duration-200 group-hover:scale-110">
+                    {cat.icon}
+                  </span>
+                  <span className={`text-[11px] font-bold leading-tight ${isSelected ? 'text-amber-400' : 'text-slate-200'}`}>
+                    {cat.name}
+                  </span>
+                  <span className="text-[9px] text-slate-400 font-medium leading-none mt-1">
+                    {cat.desc}
+                  </span>
+                  {isSelected && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 text-slate-950 rounded-full flex items-center justify-center text-[9px] font-black shadow-sm shadow-amber-400/50 animate-fade-in">
+                      ✓
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
+
+        {/* Vehicle Model Selection (Slide-in Pill Buttons) */}
+        {vehicleCategory && VEHICLE_MODELS[vehicleCategory] && (
+          <div className="flex flex-col gap-2 pt-1 animate-fade-in transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <label className="text-xs text-slate-400 font-semibold uppercase flex items-center gap-1.5">
+                <span>🔑</span> VEHICLE MODEL
+              </label>
+              <span className="text-[10px] text-slate-500 font-normal">
+                {VEHICLE_MODELS[vehicleCategory]?.length} option(s)
+              </span>
+            </div>
+            
+            <div className="flex flex-wrap gap-2">
+              {VEHICLE_MODELS[vehicleCategory].map((model) => {
+                const isSelected = vehiclePreference === model.value;
+                return (
+                  <button
+                    key={model.value}
+                    type="button"
+                    onClick={() => setVehiclePreference(model.value)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border backdrop-blur-md transition-all duration-200 cursor-pointer ${
+                      isSelected
+                        ? 'border-amber-400 bg-amber-400/15 text-amber-300 shadow-md shadow-amber-400/20 scale-102 ring-1 ring-amber-400/40'
+                        : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:bg-white/10 hover:text-slate-200'
+                    }`}
+                  >
+                    <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-bold transition-all ${
+                      isSelected ? 'bg-amber-400 text-slate-950 scale-110' : 'border border-slate-600 text-transparent'
+                    }`}>
+                      ✓
+                    </span>
+                    <span>{model.label}</span>
+                    {model.tag && (
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider ${
+                        isSelected ? 'bg-amber-400/20 text-amber-200' : 'bg-white/5 text-slate-500'
+                      }`}>
+                        {model.tag}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
 
         <button 
