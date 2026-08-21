@@ -271,7 +271,7 @@ class RAGEngine:
                 messages.append({"role": "user", "content": prompt})
                 
                 payload = {
-                    "model": "llama-3.3-70b-specdec",
+                    "model": "openai/gpt-oss-120b",
                     "messages": messages,
                     "temperature": 0.3
                 }
