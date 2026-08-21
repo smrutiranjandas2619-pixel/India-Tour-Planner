@@ -3,14 +3,74 @@ import sqlite3
 
 # Resolve the absolute path to the SQLite database in the root folder
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Cwd is backend/app/core -> ../../.. resolves to c:\Users\Acer\OneDrive\Desktop\India Tour
-DB_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../../india_tour_planner.db"))
+LOCAL_DB_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../../india_tour_planner.db"))
+
+# Fetch Turso cloud database configuration if available
+TURSO_URL = os.environ.get("TURSO_DATABASE_URL") or os.environ.get("VITE_TURSO_DATABASE_URL")
+TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN") or os.environ.get("VITE_TURSO_AUTH_TOKEN")
+
+# Custom row-mapping wrapper for Turso libSQL client to behave exactly like sqlite3.Row
+class LibSQLRow(tuple):
+    def __new__(cls, values, keys):
+        obj = super().__new__(cls, values)
+        obj._keys = keys
+        obj._mapping = {k: i for i, k in enumerate(keys)}
+        return obj
+
+    def __getitem__(self, item):
+        if isinstance(item, str):
+            idx = self._mapping.get(item)
+            if idx is None:
+                raise KeyError(item)
+            return super().__getitem__(idx)
+        return super().__getitem__(item)
+
+    def keys(self):
+        return self._keys
+
+class LibSQLCursorWrapper:
+    def __init__(self, cursor):
+        self.cursor = cursor
+
+    def execute(self, *args, **kwargs):
+        self.cursor.execute(*args, **kwargs)
+        return self
+
+    def fetchone(self):
+        row = self.cursor.fetchone()
+        if row is None:
+            return None
+        keys = [desc[0] for desc in self.cursor.description]
+        return LibSQLRow(row, keys)
+
+    def fetchall(self):
+        rows = self.cursor.fetchall()
+        keys = [desc[0] for desc in self.cursor.description]
+        return [LibSQLRow(row, keys) for row in rows]
+
+    def __getattr__(self, name):
+        return getattr(self.cursor, name)
+
+class LibSQLConnectionWrapper:
+    def __init__(self, conn):
+        self.conn = conn
+
+    def cursor(self):
+        return LibSQLCursorWrapper(self.conn.cursor())
+
+    def __getattr__(self, name):
+        return getattr(self.conn, name)
 
 def get_db_connection():
-    """Returns a thread-safe connection to the SQLite database."""
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+    """Returns a thread-safe connection to the SQLite database (local or Turso Cloud)."""
+    if TURSO_URL and ("libsql" in TURSO_URL or "turso" in TURSO_URL):
+        import libsql
+        conn = libsql.connect(TURSO_URL, auth_token=TURSO_TOKEN)
+        return LibSQLConnectionWrapper(conn)
+    else:
+        conn = sqlite3.connect(LOCAL_DB_PATH)
+        conn.row_factory = sqlite3.Row
+        return conn
 
 def init_db():
     """Initializes tables if they do not exist (ensuring data continuity)."""
@@ -48,7 +108,7 @@ def init_db():
     # Ensure avatar column exists in users table
     try:
         cursor.execute("ALTER TABLE users ADD COLUMN avatar TEXT")
-    except sqlite3.OperationalError:
+    except Exception:
         pass # Column already exists
         
     # 3. Create Cached Hotels Table
@@ -132,4 +192,3 @@ def init_db():
     
     conn.commit()
     conn.close()
-
