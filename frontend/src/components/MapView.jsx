@@ -45,10 +45,25 @@ const MapView = ({ tripData, mapFocus }) => {
 
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapRef.current).setView([20.5937, 78.9629], 5);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
-        maxZoom: 19
-      }).addTo(mapInstance.current);
+      const cartoKey = import.meta.env.VITE_CARTO_API_KEY;
+      if (cartoKey) {
+        L.tileLayer(`https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${cartoKey}`, {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 20
+        }).addTo(mapInstance.current);
+      } else {
+        // High-definition dark canvas with labels - zero watermarks, no API key required
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+          attribution: '&copy; Esri, DeLorme, NAVTEQ',
+          maxZoom: 16
+        }).addTo(mapInstance.current);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+          attribution: '',
+          maxZoom: 16
+        }).addTo(mapInstance.current);
+      }
     }
 
     return () => {
@@ -94,11 +109,15 @@ const MapView = ({ tripData, mapFocus }) => {
         // Custom Div Icons for elegant pins
         const startIcon = L.divIcon({
           className: 'custom-start-icon',
-          html: `<div style="background-color: #818cf8; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 10px #818cf8;"></div>`
+          html: `<div style="background-color: #818cf8; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #ffffff; box-shadow: 0 0 14px #818cf8, 0 0 6px rgba(129, 140, 248, 0.8);"></div>`,
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
         });
         const destIcon = L.divIcon({
           className: 'custom-dest-icon',
-          html: `<div style="background-color: #ff6b6b; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 12px #ff6b6b;"></div>`
+          html: `<div style="background-color: #1dd1a1; width: 18px; height: 18px; border-radius: 50%; border: 3px solid #ffffff; box-shadow: 0 0 16px rgba(254, 202, 87, 0.9), 0 0 8px #1dd1a1;"></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9]
         });
 
         // Plot start and destination markers (always visible outside clusters)
@@ -285,10 +304,12 @@ const MapView = ({ tripData, mapFocus }) => {
           console.warn("Failed to load OSRM routing, drawing direct line instead:", e);
         }
 
-        routePolyline.current = L.polyline(polylineCoords, {
-          color: '#818cf8',
-          weight: 4,
-          opacity: 0.85,
+        // Elegant direct dashed route matching overview screenshot
+        routePolyline.current = L.polyline([startCoords, destCoords], {
+          color: '#ff6b6b',
+          weight: 3.5,
+          opacity: 0.9,
+          dashArray: '8, 8',
           lineCap: 'round'
         }).addTo(mapInstance.current);
 

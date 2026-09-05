@@ -658,12 +658,3 @@ select option {
 }
 
 
-
-/* Dark theme filter for OpenStreetMap tiles to match dark glassmorphic design */
-#map-container .leaflet-tile-pane {
-  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
-}
-
-.light-mode #map-container .leaflet-tile-pane {
-  filter: none;
-}
