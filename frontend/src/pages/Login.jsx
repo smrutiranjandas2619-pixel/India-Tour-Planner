@@ -79,8 +79,8 @@ const Login = () => {
   };
 
   return (
-    <section className="flex items-center justify-center min-h-[65vh] w-full p-4 animate-fade-in">
-      <div className="glass-panel w-full max-w-md p-6 md:p-8 flex flex-col gap-6">
+    <section className="flex items-center justify-center min-h-[calc(100vh-120px)] w-full px-3 py-4 animate-fade-in">
+      <div className="glass-panel w-full max-w-md p-5 sm:p-8 flex flex-col gap-5 rounded-2xl border border-white/10 shadow-2xl">
         <div className="text-center flex flex-col gap-1">
           <h2 className="text-2xl font-extrabold text-white">Welcome Back</h2>
         </div>

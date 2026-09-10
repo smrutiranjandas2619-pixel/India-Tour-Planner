@@ -3,6 +3,7 @@
   "appName": "India Tour Planner",
   "webDir": "dist",
   "server": {
-    "androidScheme": "https"
+    "url": "https://india-tour-planner-1.onrender.com",
+    "cleartext": true
   }
 }
