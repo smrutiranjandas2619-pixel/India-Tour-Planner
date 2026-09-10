@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">India Tour Planner</string>
+    <string name="title_activity_main">India Tour Planner</string>
+    <string name="package_name">com.indiatourplanner.app</string>
+    <string name="custom_url_scheme">com.indiatourplanner.app</string>
+</resources>
