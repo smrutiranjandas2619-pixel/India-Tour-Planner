@@ -324,7 +324,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Header Navigation Bar (Global) */}
-      <header className="sticky top-0 z-40 w-full px-4 sm:px-6 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] flex justify-between items-center gap-4 border-b border-white/10 bg-[#080b11]/95 backdrop-blur-xl animate-fade-in shrink-0">
+      <header className="sticky top-0 z-40 w-full px-4 sm:px-6 pb-3 pt-10 sm:pt-3.5 flex justify-between items-center gap-4 border-b border-white/10 bg-[#080b11]/95 backdrop-blur-xl animate-fade-in shrink-0">
         <div className="flex items-center gap-3">
           {user && (
             <button 
@@ -364,9 +364,7 @@ const Navbar = () => {
             {/* Header inside drawer */}
             <div className="flex justify-between items-center border-b border-[rgba(255,255,255,0.06)] pb-3 mb-5">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-sunsetCoral to-marigoldGold flex items-center justify-center shadow-lg shrink-0">
-                  <i className="fa-solid fa-plane-departure text-white text-sm"></i>
-                </div>
+                <img src="/app-icon.png" alt="India Tour Logo" className="w-8 h-8 rounded-lg object-cover shadow-lg border border-amber-500/30 shrink-0" />
                 <div>
                   <h2 className="text-xs font-extrabold tracking-tight text-white leading-none">
                     India <span className="gradient-text-accent">Tour Planner</span>
