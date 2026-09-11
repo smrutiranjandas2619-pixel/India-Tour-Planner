@@ -3,7 +3,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import AppRoutes from './routes/AppRoutes';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import SplashScreen from './components/SplashScreen';
 
 const App = () => {
@@ -18,7 +17,6 @@ const App = () => {
           <main className="flex-grow">
             <AppRoutes />
           </main>
-          <Footer />
         </div>
       </AuthProvider>
     </BrowserRouter>
