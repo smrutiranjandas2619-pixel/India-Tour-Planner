@@ -336,7 +336,7 @@ const Navbar = () => {
             </button>
           )}
 
-          <img src="/app-icon.png" alt="India Tour Logo" className="w-10 h-10 rounded-xl object-cover shadow-lg border border-amber-500/30 shrink-0" />
+          <img src="/app-icon.png" alt="India Tour Logo" className="w-11 h-11 rounded-xl object-contain p-0.5 bg-[#fbf7f4] shadow-md border border-amber-500/20 shrink-0" />
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
               India <span className="gradient-text-accent">Tour Planner</span>
@@ -364,7 +364,7 @@ const Navbar = () => {
             {/* Header inside drawer */}
             <div className="flex justify-between items-center border-b border-[rgba(255,255,255,0.06)] pb-3 mb-5">
               <div className="flex items-center gap-2.5">
-                <img src="/app-icon.png" alt="India Tour Logo" className="w-8 h-8 rounded-lg object-cover shadow-lg border border-amber-500/30 shrink-0" />
+                <img src="/app-icon.png" alt="India Tour Logo" className="w-9 h-9 rounded-lg object-contain p-0.5 bg-[#fbf7f4] shadow-md border border-amber-500/20 shrink-0" />
                 <div>
                   <h2 className="text-xs font-extrabold tracking-tight text-white leading-none">
                     India <span className="gradient-text-accent">Tour Planner</span>
