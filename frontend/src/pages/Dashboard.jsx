@@ -818,8 +818,8 @@ Join the tour or design yours!`;
             <TripPlannerForm onSubmitPlan={handlePlanTrip} loading={loading} />
           </div>
           
-          {/* Budget Calculator - only in setup tab on mobile */}
-          <div className={`lg:block ${mobileWorkTab === 'setup' && tripData ? 'block mt-2' : 'hidden'}`}>
+          {/* Budget Calculator - on desktop, and under finances tab on mobile */}
+          <div className={`lg:block ${mobileWorkTab === 'finances' && tripData ? 'block' : 'hidden'}`}>
             <BudgetCalculator tripData={tripData} onOpenDetails={(type) => setDetailDrawer({ open: true, type })} />
           </div>
 
