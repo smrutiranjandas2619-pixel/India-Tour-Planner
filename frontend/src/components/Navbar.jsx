@@ -356,9 +356,11 @@ const Navbar = () => {
           />
 
           <aside 
-            className="fixed left-0 top-0 h-screen z-[4050] w-[320px] max-w-[85vw] bg-[#0a0d14] border-r border-[rgba(255,255,255,0.08)] shadow-2xl flex flex-col p-5 animate-slide-in-left text-left"
+            className="fixed left-0 top-0 h-full max-h-[100dvh] z-[4050] w-[320px] max-w-[85vw] bg-[#0a0d14] border-r border-[rgba(255,255,255,0.08)] shadow-2xl flex flex-col px-5 pt-12 sm:pt-6 pb-6 animate-slide-in-left text-left overflow-y-auto"
             style={{
               backgroundImage: 'radial-gradient(at 0% 0%, rgba(255, 107, 107, 0.05) 0px, transparent 50%)',
+              paddingTop: 'max(3.25rem, calc(env(safe-area-inset-top) + 1rem))',
+              paddingBottom: 'max(1.75rem, calc(env(safe-area-inset-bottom) + 1rem))',
             }}
           >
             {/* Header inside drawer */}
