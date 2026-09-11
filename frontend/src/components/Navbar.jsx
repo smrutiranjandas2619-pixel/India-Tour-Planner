@@ -324,7 +324,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Header Navigation Bar (Global) */}
-      <header className="sticky top-0 z-40 w-full px-4 sm:px-6 pb-3 pt-10 sm:pt-3.5 flex justify-between items-center gap-4 border-b border-white/10 bg-[#080b11]/95 backdrop-blur-xl animate-fade-in shrink-0">
+      <header className="fixed top-0 left-0 right-0 z-40 w-full px-4 sm:px-6 pb-3 pt-10 sm:pt-3.5 flex justify-between items-center gap-4 border-b border-white/10 bg-[#080b11]/95 backdrop-blur-xl animate-fade-in shrink-0">
         <div className="flex items-center gap-3">
           {user && (
             <button 

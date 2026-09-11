@@ -14,7 +14,7 @@ const App = () => {
         {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
         <div className="flex flex-col min-h-screen bg-[#080b11]">
           <Navbar />
-          <main className="flex-grow">
+          <main className="flex-grow pt-[84px] sm:pt-[70px]">
             <AppRoutes />
           </main>
         </div>

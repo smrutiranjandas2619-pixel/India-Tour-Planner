@@ -758,7 +758,7 @@ Join the tour or design yours!`;
   return (
     <div className="flex flex-col gap-0 w-full">
       {/* Mobile Premium Workspace Switcher Header */}
-      <div className="lg:hidden w-full sticky top-0 z-[200] bg-[#080b11]/90 backdrop-blur-md border-b border-[rgba(255,255,255,0.06)] py-3 px-2 flex justify-around gap-1.5 shrink-0">
+      <div className="lg:hidden w-full z-10 bg-[#080b11]/90 backdrop-blur-md border-b border-[rgba(255,255,255,0.06)] py-3 px-2 flex justify-around gap-1.5 shrink-0">
         <button
           onClick={() => setMobileWorkTab('setup')}
           className={`flex-1 py-2 px-1 rounded-xl text-[9px] font-black uppercase tracking-wider flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
