@@ -1871,7 +1871,7 @@ Join the tour or design yours!`;
       })()}
 
       {/* FLOATING AI TRAVEL ASSISTANT */}
-      <div className="fixed bottom-6 right-6 z-[999] flex flex-col items-end gap-3 font-body">
+      <div className="fixed bottom-6 right-6 z-[999] hidden md:flex flex-col items-end gap-3 font-body">
         {assistantOpen ? (
           <div className="w-[360px] max-w-[90vw] h-[450px] glass-panel bg-[#090d16]/95 border border-[rgba(255,255,255,0.08)] shadow-2xl flex flex-col overflow-hidden animate-slide-in-up">
             {/* Header */}

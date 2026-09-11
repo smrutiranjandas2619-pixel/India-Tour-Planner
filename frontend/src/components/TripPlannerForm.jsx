@@ -222,7 +222,7 @@ const TripPlannerForm = ({ onSubmitPlan, loading }) => {
               onBlur={() => setTimeout(() => setShowDestDropdown(false), 200)}
               required 
               className="glass-input p-2.5 text-sm" 
-              placeholder="e.g. Goa, Ladakh, Manali..."
+              placeholder="e.g. Goa"
               id="destination"
               autoComplete="off"
             />
@@ -294,7 +294,7 @@ const TripPlannerForm = ({ onSubmitPlan, loading }) => {
               onChange={(e) => handleCategoryChange(e.target.value)}
               className="glass-input p-2.5 text-sm bg-darkSlate"
             >
-              <option value="auto">AI Recommendation (Auto)</option>
+              <option value="auto">Recommendation (Auto)</option>
               <option value="none">No Transport / Personal Vehicle (None)</option>
               <option value="scooty_rent">Scooty Rental (Self-Drive)</option>
               <option value="bike_rent">Bike Rental (Self-Drive)</option>
@@ -311,7 +311,7 @@ const TripPlannerForm = ({ onSubmitPlan, loading }) => {
               className="glass-input p-2.5 text-sm bg-darkSlate disabled:opacity-50"
             >
               {vehicleCategory === 'auto' && (
-                <option value="auto">AI Recommended Auto</option>
+                <option value="auto">Recommended Auto</option>
               )}
               {vehicleCategory === 'none' && (
                 <option value="none">No Vehicle (₹0 / day)</option>
